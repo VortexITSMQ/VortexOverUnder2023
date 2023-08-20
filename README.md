@@ -43,7 +43,7 @@ Nunca olvides que cada línea de código que escribas y cada archivo que compart
 
 - Crea un PR después de tu último commit.
 - RECUERDA QUE DEBE SALIRTE UN MENSAJE DE LA SIGUIENTE MANERA❗❗❗❗❗❗❗
-<img src=".github/PR.jpg" alt="PR" width="200">
+<img src=".github/PR.png" alt="PR" width="200">
 - Llena la plantilla del PR y la checklist.
 - Cambia la rama base según corresponda.
 - Elige reviewers, asignados y tags.
