@@ -57,6 +57,10 @@ Nunca olvides que cada línea de código que escribas y cada archivo que compart
 - Acepta, comenta o rechaza el código.
 - Ejecuta "SQUASH AND MERGE" para finalizar❗❗❗❗❗❗❗
 
+### 6. Finalmete, cierra tu ISSUE🔐
+
+- Pon un comentario si es necesario
+
 ## Comandos Básicos de Git🤸‍♀️🤸‍♂️🤸
 
 - `git branch` - Ver las ramas existentes.
