@@ -27,13 +27,13 @@ Before marking the PR as ready and asking for someone to review it, make sure AL
 
 Before approving and merging the PR, make sure ALL steps are checked. You are responsible for ensuring the answers to all questions are true.
 
-If the submitter makes updates to the PR, you MUST go through all steps again.
+If the submitter makes updates to the PR, you MUST go through all steps again
 
-- [ ] You added your name to this description in the "Reviewer name" field.
-- [ ] You tested the changes locally.
-- [ ] You checked out the PR locally.
-- [ ] You made sure everything starts up correctly.
-- [ ] You reviewed all changes and files manually.
-- [ ] Code conforms to coding standards.
+- [ ] You added your name to this description in the "Reviewer name" field
+- [ ] You tested the changes locally
+- [ ] You checked out the PR locally
+- [ ] You made sure everything starts up correctly
+- [ ] You reviewed all changes and files manually
+- [ ] Code conforms to coding standards
 - [ ] You are sure PR is ready to be merged
-- [ ] You approved and merged the PR.
+- [ ] You approved and merged the PR
