@@ -10,12 +10,12 @@
 
 ## ¿Qué nos hace VORTEX?
 
-**No estas solo, VORTEX siempre estará contigo💖** <br>
+**No estás solo, VORTEX siempre estará contigo💖** <br>
 Nuestra filosofía es simple: <br>
 "Solos llegamos más rápido🏃‍♀️🏃‍♂️ pero juntos PARTIMOS MADRES☠️!" <br><br>
 Nunca olvides que cada línea de código que escribas y cada archivo que compartas contribuyen a algo más grande que tú mismo 🤟.<br>
 
-## Tu Viaje con VORTEX🚀⭐
+## Tu viaje con VORTEX🚀⭐
 
 ### 1. Crear un ISSUE💡
 
