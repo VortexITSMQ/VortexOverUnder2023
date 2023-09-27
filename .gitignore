@@ -1,0 +1,121 @@
+# -*- mode: conf; -*-
+# --------------------------------------------------------------------------
+# C++ ignores.
+# From https://github.com/github/gitignore/blob/master/C%2B%2B.gitignore.
+# --------------------------------------------------------------------------
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# --------------------------------------------------------------------------
+# Emacs ignores.
+# From https://github.com/github/gitignore/blob/master/Global/Emacs.gitignore
+# --------------------------------------------------------------------------
+
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+# --------------------------------------------------------------------------
+# PROS ignores.
+# --------------------------------------------------------------------------
+
+# From # From https://7842navigators.com/tutorials/walkthroughs/introduction-to-github/
+*.log
+bin/output.elf
+*.bin
+bin/output.bin
+bin/_pros_ld_timestamp.o
+*.ini
+compile_commands.json
+desktop.ini
+.vscode/*
+
+# Additional recommendations, adapted from jpearman's suggestions at
+# https://www.vexforum.com/t/github-with-pros/52291/8.
+**/bin/monolith.elf
+**/bin/monolith.bin
+
+# --------------------------------------------------------------------------
+# VEXcode Pro V5 ignores.
+# --------------------------------------------------------------------------
+**/build
+
+# --------------------------------------------------------------------------
+# MacOS ignores.
+# --------------------------------------------------------------------------
+.DS_Store
+
+#--------
+compile_commands.json
+Robot15/Robot15.v5code
