@@ -7,21 +7,24 @@ using code = vision::code;
 // A global instance of brain used for printing to the V5 Brain screen
 brain  Brain;
 
-//Derecha
+//DERECHA
 motor RightDriveA = motor(PORT1, ratio18_1, true);
 motor RightDriveB = motor(PORT2, ratio18_1, true);
 
-//Izquierda
+//IZQUIERDA
 motor LeftDriveA = motor(PORT4, ratio18_1, false);
 motor LeftDriveB = motor(PORT3, ratio18_1, false);
 
-//Grupo de motores izquierdos
+//MOTOR PARA CATAPULTA
+motor catapult = motor(PORT15, ratio18_1, false);
+
+//GRUPO DE MOTORES DE LA IZQUIERDA
 motor_group LeftDriveSmart = motor_group(LeftDriveA, LeftDriveB);
 
-//Grupo de motores derechos
+//GRUPO DE MOTORES DE LA DERECHA
 motor_group RightDriveSmart = motor_group(RightDriveA, RightDriveB);
 
-//Drivetrain (compuesto por grupo derecho e izquierdo)
+//Drivetrain (COMPUESTO POR GRUPO DE LA DERECHA Y GRUPO IZQUIERDO)
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 299.24, 295, 40, mm, 1);
 controller Controller1 = controller(primary);
 
@@ -85,10 +88,15 @@ int rc_auto_loop_function_Controller1() {
         RightDriveSmart.spin(forward);
       }
 
-      // INDEXER
+      // This is for the PISTON RECOLECTORS
       // check the ButtonR2 status to control indexer
       if (Controller1.ButtonR1.pressing()) { Indexer.set(true); }
       else { Indexer.set(false); }
+
+      // This is for the CATAPULT
+      // check the ButtonR2 status to control indexer
+      if (Controller1.ButtonA.pressing()) { catapult.spin(forward); }
+      else { catapult.stop(); }
     }
     // wait before repeating the process
     wait(20, msec);
