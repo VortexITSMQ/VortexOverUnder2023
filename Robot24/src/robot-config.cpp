@@ -4,6 +4,8 @@ using namespace vex;
 using signature = vision::signature;
 using code = vision::code;
 
+bool WingAreOpen = false;
+
 // A global instance of brain used for printing to the V5 Brain screen
 brain  Brain;
 
@@ -35,6 +37,11 @@ bool RemoteControlCodeEnabled = true;
 bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
+// Set pneumatic indexer
+// ALITAS
+pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.A);
+pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.B);
+
 // define a task that will handle monitoring inputs from Controller1
 int rc_auto_loop_function_Controller1() {
   // process the controller input every 20 milliseconds
@@ -44,8 +51,8 @@ int rc_auto_loop_function_Controller1() {
       // calculate the drivetrain motor velocities from the controller joystick axies
       // left = Axis3 + Axis1
       // right = Axis3 - Axis1
-      int drivetrainLeftSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
-      int drivetrainRightSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
+      int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
+      int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
       
       // check if the value is inside of the deadband range
       if (drivetrainLeftSideSpeed < 5 && drivetrainLeftSideSpeed > -5) {
@@ -83,6 +90,23 @@ int rc_auto_loop_function_Controller1() {
       if (DrivetrainRNeedsToBeStopped_Controller1) {
         RightDriveSmart.setVelocity(drivetrainRightSideSpeed, percent);
         RightDriveSmart.spin(forward);
+      }
+
+      if (Controller1.ButtonR1.pressing()) {
+        if (WingAreOpen) {
+            // Si las alas están abiertas, las cierra
+            IndexerRight.set(false);
+            IndexerLeft.set(false);
+            WingAreOpen = false;
+        } else {
+            // Si las alas están cerradas, las abre
+            IndexerRight.set(true);
+            IndexerLeft.set(true);
+            WingAreOpen = true;
+        }
+
+        // Espera a que se suelte el botón R1 antes de continuar
+        while (Controller1.ButtonR1.pressing()) {}
       }
     }
     // wait before repeating the process
