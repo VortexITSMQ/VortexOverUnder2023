@@ -14,8 +14,13 @@ extern motor RightDriveB;
 extern motor LeftDriveA;
 extern motor LeftDriveB;
 
+// GRUPO DE MOTORES
 extern motor_group LeftDriveSmart;
 extern motor_group RightDriveSmart;
+
+// ALITAS
+extern pneumatics IndexerRight;
+extern pneumatics IndexerLeft;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
