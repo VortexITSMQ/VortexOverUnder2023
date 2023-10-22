@@ -1,6 +1,7 @@
 #include "vex.h"
 #include "constants.h"
 
+
 using namespace vex;
 using signature = vision::signature;
 using code = vision::code;
@@ -39,6 +40,7 @@ int rc_auto_loop_function_Controller1() {
       // right = Axis3 - Axis1
       int drivetrainLeftSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
       int drivetrainRightSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
+
       
       // check if the value is inside of the deadband range
       if (drivetrainLeftSideSpeed < 5 && drivetrainLeftSideSpeed > -5) {
@@ -50,6 +52,7 @@ int rc_auto_loop_function_Controller1() {
           DrivetrainLNeedsToBeStopped_Controller1 = false;
         }
       } else {
+
         // reset the toggle so that the deadband code knows to stop the left motor nexttime the input is in the deadband range
         DrivetrainLNeedsToBeStopped_Controller1 = true;
       }
@@ -77,6 +80,7 @@ int rc_auto_loop_function_Controller1() {
         RightDriveSmart.setVelocity(drivetrainRightSideSpeed, percent);
         RightDriveSmart.spin(forward);
       }
+
     }
     // wait before repeating the process
     wait(20, msec);

@@ -38,6 +38,7 @@ int main() {
 
   while (true) {
     display_info_dinamic();
+
     wait(100, msec);
   }
 }

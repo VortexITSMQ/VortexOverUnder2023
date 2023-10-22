@@ -16,6 +16,9 @@ extern motor LeftDriveB;
 extern motor_group LeftDriveSmart;
 extern motor_group RightDriveSmart;
 
+//Catapulta
+extern motor catapult;
+
 //Recolector 15(alitas)
 extern pneumatics Indexer;
 
