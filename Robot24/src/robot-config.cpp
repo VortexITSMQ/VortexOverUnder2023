@@ -1,31 +1,24 @@
 #include "vex.h"
+#include "constants.h"
 
 using namespace vex;
 using signature = vision::signature;
 using code = vision::code;
 
-// A global instance of brain used for printing to the V5 Brain screen
+//---------------------- Devices ----------------------//
 brain  Brain;
-
-// VEXcode device constructors
 controller Controller1 = controller(primary);
 
-// Right motors
+// Chassis
+inertial DrivetrainInertial = inertial(PORT13);
 motor RightDriveA = motor(PORT1, ratio18_1, true);
 motor RightDriveB = motor(PORT2, ratio18_1, true);
-
-// Left motors
-motor LeftDriveA = motor(PORT3, ratio18_1, false);
-motor LeftDriveB = motor(PORT4, ratio18_1, false);
-
-// Left motor groups
+motor LeftDriveA  = motor(PORT3, ratio18_1, false);
+motor LeftDriveB  = motor(PORT4, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(LeftDriveA, LeftDriveB);
-
-// Right motor groups
 motor_group RightDriveSmart = motor_group(RightDriveA, RightDriveB);
-
-// Drivetrain
-drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.186, 310, 230, mm, 1);
+smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, DrivetrainInertial, 
+  WHEEL_TRAVEL, TRACK_WIDTH, TRACK_BASE, mm, EXT_GEAR_RATIO);
 
 // VEXcode generated functions
 // Enable/Disable controller
@@ -91,11 +84,26 @@ int rc_auto_loop_function_Controller1() {
   return 0;
 }
 
+//task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
+
+void auton_func() {
+  Drivetrain.setDriveVelocity(80, pct);
+  /*Drivetrain.driveFor(reverse, 20, distanceUnits::cm);
+  Drivetrain.turnFor(right, 45, degrees);
+  Drivetrain.driveFor(forward, 43.01, distanceUnits::cm);
+  Drivetrain.driveFor(reverse, 63.01, distanceUnits::cm);
+  Drivetrain.turnFor(left, 45, degrees);
+  Drivetrain.driveFor(forward, 50.73, distanceUnits::cm);
+  Drivetrain.turnFor(left, 90, degrees);*/
+  Drivetrain.driveFor(forward, 10, distanceUnits::cm);
+  Brain.Screen.print("Hello, VEX!");
+}
+
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
  * 
  * This should be called at the start of your int main function.
  */
 void vexcodeInit( void ) {
-  task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
+  // Nothing to initialize
 }
