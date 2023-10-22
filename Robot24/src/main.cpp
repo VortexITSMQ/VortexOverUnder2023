@@ -56,6 +56,7 @@ void pre_auton(void) {
 void autonomous(void) {
   // ..........................................................................
   // Insert autonomous user code here.
+  Drivetrain.turnFor(10.0, degrees);
   // ..........................................................................
 }
 
@@ -95,7 +96,9 @@ int main() {
   Competition.drivercontrol(usercontrol);
 
   // Run the pre-autonomous function.
+  autonomous();
   pre_auton();
+  
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
