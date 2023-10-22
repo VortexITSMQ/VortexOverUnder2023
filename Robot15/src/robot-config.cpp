@@ -7,6 +7,8 @@ using code = vision::code;
 // A global instance of brain used for printing to the V5 Brain screen
 brain  Brain;
 
+bool RecolectorIsActive = false;
+
 //DERECHA
 motor RightDriveA = motor(PORT1, ratio18_1, true);
 motor RightDriveB = motor(PORT2, ratio18_1, true);
@@ -37,9 +39,27 @@ bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
 // Set pneumatic indexer
 pneumatics Indexer = pneumatics(Brain.ThreeWirePort.B);
+pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.C);
+pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.D);
+int cont = 0;
+
+void R1callback(){
+  printf("cont ${cont}");
+  if (RecolectorIsActive){
+    IndexerLeft.set(false);
+    IndexerRight.set(false);
+    RecolectorIsActive = false;
+  }
+  else{
+    IndexerLeft.set(true);
+    IndexerRight.set(true);
+    RecolectorIsActive = true;
+  }
+}
 
 // define a task that will handle monitoring inputs from Controller1
 int rc_auto_loop_function_Controller1() {
+  Controller1.ButtonR1.pressed(R1callback);
   // process the controller input every 20 milliseconds
   // update the motors based on the input values
   while(true) {
@@ -90,8 +110,9 @@ int rc_auto_loop_function_Controller1() {
 
       // This is for the PISTON RECOLECTORS
       // check the ButtonR2 status to control indexer
-      if (Controller1.ButtonR1.pressing()) { Indexer.set(true); }
-      else { Indexer.set(false); }
+      //if (Controller1.ButtonR1.pressing()) { Indexer.set(true); }
+      //else { Indexer.set(false); }
+
 
       // This is for the CATAPULT
       // check the ButtonR2 status to control indexer
