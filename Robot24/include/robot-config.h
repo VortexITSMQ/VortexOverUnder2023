@@ -6,19 +6,19 @@ extern brain Brain;
 extern controller Controller1;
 extern drivetrain Drivetrain;
 
-// Motores derecha
+// Right motors
 extern motor RightDriveA;
 extern motor RightDriveB;
 
-// Motores izquierda
+// Left motors
 extern motor LeftDriveA;
 extern motor LeftDriveB;
 
-// GRUPO DE MOTORES
+// Motors Group
 extern motor_group LeftDriveSmart;
 extern motor_group RightDriveSmart;
 
-// ALITAS
+// Wings
 extern pneumatics IndexerRight;
 extern pneumatics IndexerLeft;
 

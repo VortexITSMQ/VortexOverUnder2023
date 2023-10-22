@@ -4,6 +4,7 @@ using namespace vex;
 using signature = vision::signature;
 using code = vision::code;
 
+// Global varible that checks if the wings are open
 bool WingAreOpen = false;
 
 // A global instance of brain used for printing to the V5 Brain screen
@@ -29,7 +30,6 @@ motor_group RightDriveSmart = motor_group(RightDriveA, RightDriveB);
 // Drivetrain
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.186, 310, 230, mm, 1);
 
-// VEXcode generated functions
 // Enable/Disable controller
 bool RemoteControlCodeEnabled = true;
 
@@ -38,7 +38,7 @@ bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
 // Set pneumatic indexer
-// ALITAS
+// Wings
 pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.A);
 pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.B);
 
@@ -64,7 +64,7 @@ int rc_auto_loop_function_Controller1() {
           DrivetrainLNeedsToBeStopped_Controller1 = false;
         }
       } else {
-        // reset the toggle so that the deadband code knows to stop the left motor nexttime the input is in the deadband range
+        // reset the toggle so that the deadband code know
         DrivetrainLNeedsToBeStopped_Controller1 = true;
       }
       // check if the value is inside of the deadband range
@@ -92,20 +92,22 @@ int rc_auto_loop_function_Controller1() {
         RightDriveSmart.spin(forward);
       }
 
+      // If we press the R1 button we open or close the wings
       if (Controller1.ButtonR1.pressing()) {
+        //If the wings are open then we close them
         if (WingAreOpen) {
-            // Si las alas están abiertas, las cierra
             IndexerRight.set(false);
             IndexerLeft.set(false);
             WingAreOpen = false;
-        } else {
-            // Si las alas están cerradas, las abre
+        }
+        //If the wings are close then we open them
+        else {
             IndexerRight.set(true);
             IndexerLeft.set(true);
             WingAreOpen = true;
         }
-
-        // Espera a que se suelte el botón R1 antes de continuar
+        
+        // Wait for the R1 button to be released before continuing
         while (Controller1.ButtonR1.pressing()) {}
       }
     }
