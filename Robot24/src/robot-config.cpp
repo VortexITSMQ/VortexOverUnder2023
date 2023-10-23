@@ -6,10 +6,15 @@ using namespace vex;
 using signature = vision::signature;
 using code = vision::code;
 
+// Global varible that checks if the wings are open
+ bool WingAreOpen = false;
+
 //---------------------- Devices ----------------------//
 brain  Brain;
 controller Controller1 = controller(primary);
-
+// Wings
+ pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.A);
+ pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.B);
 // Chassis
 inertial DrivetrainInertial = inertial(PORT13);
 motor RightDriveA = motor(PORT1, ratio18_1, true);
@@ -27,8 +32,25 @@ bool RemoteControlCodeEnabled = true;
 bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
-int rc_auto_loop_function_Controller1() {
+void Wings_cb(){
+  if (Controller1.ButtonR1.pressing()) {
+         //If the wings are open then we close them
+         if (WingAreOpen) {
+             IndexerRight.set(false);
+             IndexerLeft.set(false);
+             WingAreOpen = false;
+         }
+         //If the wings are close then we open them
+         else {
+             IndexerRight.set(true);
+             IndexerLeft.set(true);
+             WingAreOpen = true;
+         }
+       }
+}
 
+int rc_auto_loop_function_Controller1() {
+  Controller1.ButtonR1.pressed(Wings_cb);
   while(true) {
     chassis_control();
   }
