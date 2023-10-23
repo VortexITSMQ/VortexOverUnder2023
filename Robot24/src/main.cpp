@@ -15,7 +15,7 @@ using namespace vex;
 competition Competition; 
 
 void display_info_dinamic(){
-  std::cout << "FWU: " << std::endl;
+  std::cout << "Im working " << std::endl;
 }
 
 void pre_auton(void) {
