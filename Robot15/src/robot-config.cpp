@@ -44,7 +44,6 @@ pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.D);
 int cont = 0;
 
 void R1callback(){
-  printf("cont ${cont}");
   if (RecolectorIsActive){
     IndexerLeft.set(false);
     IndexerRight.set(false);
