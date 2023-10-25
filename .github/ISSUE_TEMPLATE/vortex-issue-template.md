@@ -1,24 +1,23 @@
 ---
 name: VORTEX issue template
 about: All team members of vortex should use this template to create an issue
-title: '[TAG] ¿Que hace esta rama? ¿Para que? "Agrega funcion de giro para girar  motor
-  1"'
+title: '[TAG] ¿What does this branch do? ¿Why? "Add function to calculare the velocity of motor1"'
 labels: ''
 assignees: ''
 
 ---
 
-## Nombre: [ESCRIBE AQUI]
+## Name: [ESCRIBE AQUI]
 
-## Descripción
-
-[ESCRIBE AQUI]
-
-## Qué haré?
+## Description
 
 [ESCRIBE AQUI]
 
-## Información Adicional
+## What will I do?
+
+[ESCRIBE AQUI]
+
+## Aditional Info
 
 [Cualquier información adicional que sea relevante]
 
