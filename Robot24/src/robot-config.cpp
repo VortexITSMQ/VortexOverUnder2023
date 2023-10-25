@@ -13,10 +13,10 @@ using code = vision::code;
 brain  Brain;
 controller Controller1 = controller(primary);
 // Wings
- pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.A);
- pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.B);
+pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.A);
+pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.B);
 // Chassis
-inertial DrivetrainInertial = inertial(PORT13);
+inertial DrivetrainInertial = inertial(PORT11);
 motor RightDriveA = motor(PORT1, ratio18_1, true);
 motor RightDriveB = motor(PORT2, ratio18_1, true);
 motor LeftDriveA  = motor(PORT3, ratio18_1, false);
