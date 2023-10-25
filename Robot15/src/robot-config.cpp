@@ -52,39 +52,15 @@ void Collector_cb(){
   }
 }
 
-// void BaseMotor_cb(){
-//   if (!BaseMotorActive){
-//     printf("hola");
-//     BaseMotor.spinToPosition(1000, degrees, 180, rpm, true);
-//     BaseMotorActive = true;
-//   }
-//   else{
-//     BaseMotor.spinToPosition(-1000, degrees, 180, rpm, true);
-//     BaseMotorActive = false;
-//   }
-// }
-
-// void ArmMotor_cb(){
-//   if (!ArmMotorActive){
-//     ArmMotor.spinToPosition(1500, degrees, 180, rpm, true);
-//     ArmMotorActive = true;
-//   }
-//   else{
-//     ArmMotor.spinToPosition(-1500, degrees, 180, rpm, true);
-//     ArmMotorActive = false;
-//   }
-// }
-
 void BaseMotor_cb(){
-  while(Controller1.ButtonA.pressing() && !BaseMotorActive){
+  while(Controller1.ButtonA.pressing() && !BaseMotorActive)
     BaseMotor.spin(fwd, 180, rpm);
-  }
-  while(Controller1.ButtonA.pressing() && BaseMotorActive){
+  while(Controller1.ButtonA.pressing() && BaseMotorActive)
     BaseMotor.spin(reverse, 180, rpm);
-  }
   BaseMotorActive = !BaseMotorActive;
   BaseMotor.stop(hold);
 }
+
 void ArmMotor_cb(){
   while(Controller1.ButtonB.pressing() && !ArmMotorActive){
     ArmMotor.spin(fwd, 180, rpm);
@@ -148,8 +124,4 @@ void chassis_control(){
     RightDriveSmart.setVelocity(drivetrainRightSideSpeed, percent);
     RightDriveSmart.spin(forward);
   }
-  // while(Controller1.ButtonA.pressing()){
-  //   ArmMotor.spin(fwd);
-  //   // BaseMotor.spin(fwd);
-  // }
 }
