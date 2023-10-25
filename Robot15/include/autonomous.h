@@ -10,12 +10,51 @@ extern brain Brain;
 //--------- Main auton functions ---------//
 void auton()
 {
-  Drivetrain.driveFor(fwd, 120, distanceUnits::cm);
-  Drivetrain.turnToHeading(900, rotationUnits::deg);
+  Drivetrain.setDriveVelocity(80, percent);
+
+  DrivetrainInertial.calibrate();
+  task::sleep(2000);
+
+  // Reinicia el sensor inercial
+  DrivetrainInertial.resetRotation();
+  //inertial_reset(DrivetrainInertial);
+
+  // Espera un momento para que el sensor se estabilice
+  task::sleep(1000);
+
+  Brain.Screen.print(DrivetrainInertial.heading());
+  Drivetrain.driveFor(reverse, 59.50, distanceUnits::in);
+
+  Drivetrain.setDriveVelocity(20, percent);
+  //Drivetrain.turnToHeading(90, rotationUnits::deg);
+
+  // Gira el robot hasta que el sensor inercial alcance aproximadamente 90 grados
+  while (fabs(DrivetrainInertial.heading() - 45.0) > 2.0) {
+    Drivetrain.setTurnVelocity(10, percent);
+    Drivetrain.turn(left); // Ajusta la dirección de giro según tus necesidades
+  
+    task::sleep(20); // Pequeña pausa para evitar que gire demasiado rápido
+  }
+
+  Drivetrain.driveFor(reverse, 3.50, distanceUnits::in);
+  
+  /*
+  // Detén el giro
+  Drivetrain.stop();
+  task::sleep(1000); 
+
+  while (fabs(DrivetrainInertial.heading() - 180.0) > 2.0) {
+    Drivetrain.setTurnVelocity(10, percent);
+    Drivetrain.turn(left); // Ajusta la dirección de giro según tus necesidades
+    task::sleep(20); // Pequeña pausa para evitar que gire demasiado rápido
+  }*/
+
+  Drivetrain.stop();
+  
   // Drivetrain.driveFor(fwd, DIST_TO_BALL_1, distanceUnits::cm);
   // Drivetrain.turnToHeading(TURN_TO_BALL_1, rotationUnits::deg);
   //std:: cout << DrivetrainInertial.heading() << std::endl;
-  Brain.Screen.print(DrivetrainInertial.heading());
+
 }
 
 void skills()

@@ -15,7 +15,8 @@ using namespace vex;
 competition Competition; 
 
 void display_info_dinamic(){
-  std::cout << "Im working " << std::endl;
+  std::cout << DrivetrainInertial.heading() << std::endl;
+  
 }
 
 void pre_auton(void) {

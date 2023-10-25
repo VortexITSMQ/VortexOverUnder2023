@@ -28,8 +28,8 @@ motor LeftDriveA  = motor(PORT3, ratio18_1, false);
 motor LeftDriveB  = motor(PORT4, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(LeftDriveA, LeftDriveB);
 motor_group RightDriveSmart = motor_group(RightDriveA, RightDriveB);
-smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, DrivetrainInertial, 
-  WHEEL_TRAVEL, TRACK_WIDTH, TRACK_BASE, mm, EXT_GEAR_RATIO);
+smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, DrivetrainInertial,
+ WHEEL_TRAVEL, TRACK_WIDTH, TRACK_BASE, mm, EXT_GEAR_RATIO); //, WHEEL_TRAVEL, TRACK_WIDTH, TRACK_BASE, mm, EXT_GEAR_RATIO
 
 
 //---------------------- User control ----------------------//
@@ -93,11 +93,12 @@ void vexcodeInit( void ) {
   wait(50, msec);
 }
 
+
 void chassis_control(){
   BaseMotor.resetPosition();
   ArmMotor.resetPosition();
-  int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
-  int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
+  int drivetrainLeftSideSpeed = -Controller1.Axis3.position() - Controller1.Axis1.position();
+  int drivetrainRightSideSpeed = -Controller1.Axis3.position() + Controller1.Axis1.position();
   
   if (drivetrainLeftSideSpeed < JOYSTICK_DEADBAND && drivetrainLeftSideSpeed > -JOYSTICK_DEADBAND) {
     if (DrivetrainLNeedsToBeStopped_Controller1) {
