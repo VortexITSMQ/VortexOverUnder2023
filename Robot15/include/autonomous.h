@@ -11,9 +11,11 @@ extern brain Brain;
 void auton()
 {
   Drivetrain.driveFor(fwd, 120, distanceUnits::cm);
-  Drivetrain.turnToHeading(90, rotationUnits::deg);
+  Drivetrain.turnToHeading(900, rotationUnits::deg);
   // Drivetrain.driveFor(fwd, DIST_TO_BALL_1, distanceUnits::cm);
   // Drivetrain.turnToHeading(TURN_TO_BALL_1, rotationUnits::deg);
+  //std:: cout << DrivetrainInertial.heading() << std::endl;
+  Brain.Screen.print(DrivetrainInertial.heading());
 }
 
 void skills()

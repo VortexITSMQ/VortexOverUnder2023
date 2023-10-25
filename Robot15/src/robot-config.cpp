@@ -21,7 +21,7 @@ pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.B);
 motor BaseMotor = motor(PORT5, ratio6_1, true);
 motor ArmMotor = motor(PORT6, ratio6_1, true);
 // Chassis
-inertial DrivetrainInertial = inertial(PORT13);
+inertial DrivetrainInertial = inertial(PORT11);
 motor RightDriveA = motor(PORT1, ratio18_1, true);
 motor RightDriveB = motor(PORT2, ratio18_1, true);
 motor LeftDriveA  = motor(PORT3, ratio18_1, false);
