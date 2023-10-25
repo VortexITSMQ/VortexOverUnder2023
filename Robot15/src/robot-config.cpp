@@ -1,134 +1,155 @@
 #include "vex.h"
+#include "constants.h"
+
 
 using namespace vex;
 using signature = vision::signature;
 using code = vision::code;
 
-//global instance of brain used for printing to the V5 Brain screen
+// Global varible that checks if the wings are open
+ bool WingAreOpen = false;
+ bool BaseMotorActive = false;
+ bool ArmMotorActive = false;
+
+//---------------------- Devices ----------------------//
 brain  Brain;
-
-bool RecolectorIsActive = false;
-
-//DERECHA
+controller Controller1 = controller(primary);
+// Collector
+pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.A);
+pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.B);
+// Climber
+motor BaseMotor = motor(PORT5, ratio6_1, true);
+motor ArmMotor = motor(PORT6, ratio6_1, true);
+// Chassis
+inertial DrivetrainInertial = inertial(PORT13);
 motor RightDriveA = motor(PORT1, ratio18_1, true);
 motor RightDriveB = motor(PORT2, ratio18_1, true);
-
-//IZQUIERDA
-motor LeftDriveA = motor(PORT4, ratio18_1, false);
-motor LeftDriveB = motor(PORT3, ratio18_1, false);
-
-//MOTOR PARA CATAPULTA
-motor catapult = motor(PORT15, ratio18_1, false);
-
-//GRUPO DE MOTORES DE LA IZQUIERDA
+motor LeftDriveA  = motor(PORT3, ratio18_1, false);
+motor LeftDriveB  = motor(PORT4, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(LeftDriveA, LeftDriveB);
-
-//GRUPO DE MOTORES DE LA DERECHA
 motor_group RightDriveSmart = motor_group(RightDriveA, RightDriveB);
+smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, DrivetrainInertial, 
+  WHEEL_TRAVEL, TRACK_WIDTH, TRACK_BASE, mm, EXT_GEAR_RATIO);
 
-//Drivetrain (COMPUESTO POR GRUPO DE LA DERECHA Y GRUPO IZQUIERDO)
-drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 299.24, 295, 40, mm, 1);
-controller Controller1 = controller(primary);
 
-// VEXcode generated functions
-// define variable for remote controller enable/disable
+//---------------------- User control ----------------------//
 bool RemoteControlCodeEnabled = true;
-// define variables used for controlling motors based on controller inputs
 bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
-// Set pneumatic indexer
-pneumatics Indexer = pneumatics(Brain.ThreeWirePort.B);
-pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.C);
-pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.D);
-int cont = 0;
-
-void R1callback(){
-  if (RecolectorIsActive){
-    IndexerLeft.set(false);
-    IndexerRight.set(false);
-    RecolectorIsActive = false;
-  }
-  else{
-    IndexerLeft.set(true);
-    IndexerRight.set(true);
-    RecolectorIsActive = true;
+void Collector_cb(){
+    //If the wings are open then we close them
+    if (WingAreOpen) {
+        IndexerRight.set(false);
+        IndexerLeft.set(false);
+        WingAreOpen = false;
+    }
+    //If the wings are close then we open them
+    else {
+        IndexerRight.set(true);
+        IndexerLeft.set(true);
+        WingAreOpen = true;
   }
 }
 
-// define a task that will handle monitoring inputs from Controller1
-int rc_auto_loop_function_Controller1() {
-  Controller1.ButtonR1.pressed(R1callback);
-  // process the controller input every 20 milliseconds
-  // update the motors based on the input values
-  while(true) {
-    if(RemoteControlCodeEnabled) {
-      // calculate the drivetrain motor velocities from the controller joystick axies
-      // left = Axis3 + Axis1
-      // right = Axis3 - Axis1
-      int drivetrainLeftSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
-      int drivetrainRightSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
-      
-      // check if the value is inside of the deadband range
-      if (drivetrainLeftSideSpeed < 5 && drivetrainLeftSideSpeed > -5) {
-        // check if the left motor has already been stopped
-        if (DrivetrainLNeedsToBeStopped_Controller1) {
-          // stop the left drive motor
-          LeftDriveSmart.stop();
-          // tell the code that the left motor has been stopped
-          DrivetrainLNeedsToBeStopped_Controller1 = false;
-        }
-      } else {
-        // reset the toggle so that the deadband code knows to stop the left motor nexttime the input is in the deadband range
-        DrivetrainLNeedsToBeStopped_Controller1 = true;
-      }
-      // check if the value is inside of the deadband range
-      if (drivetrainRightSideSpeed < 5 && drivetrainRightSideSpeed > -5) {
-        // check if the right motor has already been stopped
-        if (DrivetrainRNeedsToBeStopped_Controller1) {
-          // stop the right drive motor
-          RightDriveSmart.stop();
-          // tell the code that the right motor has been stopped
-          DrivetrainRNeedsToBeStopped_Controller1 = false;
-        }
-      } else {
-        // reset the toggle so that the deadband code knows to stop the right motor next time the input is in the deadband range
-        DrivetrainRNeedsToBeStopped_Controller1 = true;
-      }
-      
-      // only tell the left drive motor to spin if the values are not in the deadband range
-      if (DrivetrainLNeedsToBeStopped_Controller1) {
-        LeftDriveSmart.setVelocity(drivetrainLeftSideSpeed, percent);
-        LeftDriveSmart.spin(forward);
-      }
-      // only tell the right drive motor to spin if the values are not in the deadband range
-      if (DrivetrainRNeedsToBeStopped_Controller1) {
-        RightDriveSmart.setVelocity(drivetrainRightSideSpeed, percent);
-        RightDriveSmart.spin(forward);
-      }
+// void BaseMotor_cb(){
+//   if (!BaseMotorActive){
+//     printf("hola");
+//     BaseMotor.spinToPosition(1000, degrees, 180, rpm, true);
+//     BaseMotorActive = true;
+//   }
+//   else{
+//     BaseMotor.spinToPosition(-1000, degrees, 180, rpm, true);
+//     BaseMotorActive = false;
+//   }
+// }
 
-      // This is for the PISTON RECOLECTORS
-      // check the ButtonR2 status to control indexer
-      //if (Controller1.ButtonR1.pressing()) { Indexer.set(true); }
-      //else { Indexer.set(false); }
+// void ArmMotor_cb(){
+//   if (!ArmMotorActive){
+//     ArmMotor.spinToPosition(1500, degrees, 180, rpm, true);
+//     ArmMotorActive = true;
+//   }
+//   else{
+//     ArmMotor.spinToPosition(-1500, degrees, 180, rpm, true);
+//     ArmMotorActive = false;
+//   }
+// }
 
-
-      // This is for the CATAPULT
-      // check the ButtonR2 status to control indexer
-      if (Controller1.ButtonA.pressing()) { catapult.spin(forward); }
-      else { catapult.stop(); }
-    }
-    // wait before repeating the process
-    wait(20, msec);
+void BaseMotor_cb(){
+  while(Controller1.ButtonA.pressing() && !BaseMotorActive){
+    BaseMotor.spin(fwd, 180, rpm);
   }
+  while(Controller1.ButtonA.pressing() && BaseMotorActive){
+    BaseMotor.spin(reverse, 180, rpm);
+  }
+  BaseMotorActive = !BaseMotorActive;
+  BaseMotor.stop(hold);
+}
+void ArmMotor_cb(){
+  while(Controller1.ButtonB.pressing() && !ArmMotorActive){
+    ArmMotor.spin(fwd, 180, rpm);
+  }
+  while(Controller1.ButtonB.pressing() && ArmMotorActive){
+    ArmMotor.spin(reverse, 180, rpm);
+  }
+  ArmMotorActive = !ArmMotorActive;
+  ArmMotor.stop(hold);
+}
+
+int rc_auto_loop_function_Controller1() {
+  Controller1.ButtonR1.pressed(Collector_cb);
+  Controller1.ButtonA.pressed(BaseMotor_cb);
+  Controller1.ButtonB.pressed(ArmMotor_cb);
+  while(true) {
+    chassis_control();
+  }
+    
+  wait(20, msec);
   return 0;
 }
 
-/**
- * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
- * 
- * This should be called at the start of your int main function.
- */
 void vexcodeInit( void ) {
-  task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
+  wait(200, msec);
+  DrivetrainInertial.calibrate();
+  while (DrivetrainInertial.isCalibrating()) {
+    wait(25, msec);
+  }
+  wait(50, msec);
+}
+
+void chassis_control(){
+  BaseMotor.resetPosition();
+  ArmMotor.resetPosition();
+  int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
+  int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
+  
+  if (drivetrainLeftSideSpeed < JOYSTICK_DEADBAND && drivetrainLeftSideSpeed > -JOYSTICK_DEADBAND) {
+    if (DrivetrainLNeedsToBeStopped_Controller1) {
+      LeftDriveSmart.stop();
+      DrivetrainLNeedsToBeStopped_Controller1 = false;
+    }
+  } else {
+    DrivetrainLNeedsToBeStopped_Controller1 = true;
+  }
+  if (drivetrainRightSideSpeed < JOYSTICK_DEADBAND && drivetrainRightSideSpeed > -JOYSTICK_DEADBAND) {
+    if (DrivetrainRNeedsToBeStopped_Controller1) {
+      RightDriveSmart.stop();
+      DrivetrainRNeedsToBeStopped_Controller1 = false;
+    }
+  } else {
+    DrivetrainRNeedsToBeStopped_Controller1 = true;
+  }
+  
+  if (DrivetrainLNeedsToBeStopped_Controller1) {
+    LeftDriveSmart.setVelocity(drivetrainLeftSideSpeed, percent);
+    LeftDriveSmart.spin(forward);
+  }
+  if (DrivetrainRNeedsToBeStopped_Controller1) {
+    RightDriveSmart.setVelocity(drivetrainRightSideSpeed, percent);
+    RightDriveSmart.spin(forward);
+  }
+  // while(Controller1.ButtonA.pressing()){
+  //   ArmMotor.spin(fwd);
+  //   // BaseMotor.spin(fwd);
+  // }
 }
