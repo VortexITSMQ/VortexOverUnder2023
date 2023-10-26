@@ -10,14 +10,15 @@ extern brain Brain;
 //--------- Main auton functions ---------//
 void auton()
 {
+  //Complete route of ROBOT 24
   Drivetrain.driveFor(reverse, 30, distanceUnits::cm);
   Drivetrain.turnToHeading(45, rotationUnits::deg);
   Drivetrain.driveFor(fwd, 45, distanceUnits::cm);
   Drivetrain.driveFor(reverse, 45, distanceUnits::cm);
   Drivetrain.turnToHeading(0, rotationUnits::deg);
   Drivetrain.driveFor(fwd, 30, distanceUnits::cm);
-  Drivetrain.turnToHeading(-85, rotationUnits::deg);
-  Drivetrain.driveFor(fwd, 68, distanceUnits::cm);
+  Drivetrain.turnToHeading(-78, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 86, distanceUnits::cm);
 }
 
 void skills()
