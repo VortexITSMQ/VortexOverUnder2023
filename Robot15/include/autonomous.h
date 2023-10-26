@@ -15,6 +15,16 @@ void auton()
   DrivetrainInertial.calibrate();
   task::sleep(2000);
 
+  Drivetrain.driveFor(reverse, 30, distanceUnits::cm);
+  Drivetrain.turnToHeading(45, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 45, distanceUnits::cm);
+  Drivetrain.driveFor(reverse, 45, distanceUnits::cm);
+  Drivetrain.turnToHeading(0, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 30, distanceUnits::cm);
+  Drivetrain.turnToHeading(-78, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 86, distanceUnits::cm);
+
+  /*
   // Reinicia el sensor inercial
   DrivetrainInertial.resetRotation();
   //inertial_reset(DrivetrainInertial);
@@ -37,7 +47,8 @@ void auton()
   }
 
   Drivetrain.driveFor(reverse, 3.50, distanceUnits::in);
-  
+  */
+
   /*
   // Detén el giro
   Drivetrain.stop();
@@ -50,10 +61,6 @@ void auton()
   }*/
 
   Drivetrain.stop();
-  
-  // Drivetrain.driveFor(fwd, DIST_TO_BALL_1, distanceUnits::cm);
-  // Drivetrain.turnToHeading(TURN_TO_BALL_1, rotationUnits::deg);
-  //std:: cout << DrivetrainInertial.heading() << std::endl;
 
 }
 
