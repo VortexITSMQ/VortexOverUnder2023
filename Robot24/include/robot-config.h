@@ -16,8 +16,12 @@ extern motor_group RightDriveSmart;
 extern inertial DrivetrainInertial;
 
 // Wings
- extern pneumatics IndexerRight;
- extern pneumatics IndexerLeft;
+ extern motor Wing;
+
+ // Collector
+extern motor LeftRail;
+extern motor RightRail;
+extern motor Collector;
 
 // Driver Control Function
 extern int rc_auto_loop_function_Controller1();

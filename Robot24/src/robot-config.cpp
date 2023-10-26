@@ -8,15 +8,22 @@ using code = vision::code;
 
 // Global varible that checks if the wings are open
  bool WingAreOpen = false;
+ bool RailActive = false;
 
 //---------------------- Devices ----------------------//
 brain  Brain;
 controller Controller1 = controller(primary);
+// Catapult
+
+// Recolector
+motor LeftRail = motor(PORT11, ratio18_1, false);
+motor RightRail = motor(PORT11, ratio18_1, true);
+motor_group Rail = motor_group(LeftRail, RightRail);
+motor Collector = motor(PORT11, ratio18_1, true);
 // Wings
-pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.A);
-pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.B);
+motor Wing = motor(PORT10, ratio18_1, true);
 // Chassis
-inertial DrivetrainInertial = inertial(PORT11);
+inertial DrivetrainInertial = inertial(PORT12);
 motor RightDriveA = motor(PORT1, ratio18_1, true);
 motor RightDriveB = motor(PORT2, ratio18_1, true);
 motor LeftDriveA  = motor(PORT3, ratio18_1, false);
@@ -33,24 +40,37 @@ bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
 void Wings_cb(){
-  if (Controller1.ButtonR1.pressing()) {
-         //If the wings are open then we close them
-         if (WingAreOpen) {
-             IndexerRight.set(false);
-             IndexerLeft.set(false);
-             WingAreOpen = false;
-         }
-         //If the wings are close then we open them
-         else {
-             IndexerRight.set(true);
-             IndexerLeft.set(true);
-             WingAreOpen = true;
-         }
-       }
+  //If the wings are open then we close them
+  if (!WingAreOpen) {
+    Wing.spinToPosition(100, degrees, true);
+    WingAreOpen = true;
+  }
+  //If the wings are close then we open them
+  else {
+    Wing.spinToPosition(-100, degrees, true);
+    WingAreOpen = false;
+  }
+}
+
+void Rail_cb(){
+  while(Controller1.ButtonA.pressing() && !RailActive)
+    Rail.spin(fwd);
+  while(Controller1.ButtonA.pressing() && RailActive)
+    Rail.spin(reverse);
+  RailActive = !RailActive;
+  Rail.stop();
+}
+
+void Collector_cb(){
+  while(Controller1.ButtonB.pressing())
+    Collector.spin(fwd);
+  Collector.stop(hold);
 }
 
 int rc_auto_loop_function_Controller1() {
   Controller1.ButtonR1.pressed(Wings_cb);
+  Controller1.ButtonA.pressed(Rail_cb);
+  Controller1.ButtonB.pressed(Collector_cb);
   while(true) {
     chassis_control();
   }

@@ -12,8 +12,8 @@
 //----------------- Robot constants -----------------//
 const double WHEEL_DIAMETER = 101.6;    //mm
 const double WHEEL_TRAVEL   = M_PI * WHEEL_DIAMETER;
-const double TRACK_WIDTH    = 350;      //mm
-const double TRACK_BASE     = 126;      //mm
+const double TRACK_WIDTH    = 354;      //mm
+const double TRACK_BASE     = 140;      //mm
 const double EXT_GEAR_RATIO = 1;    
 
 //----------------- Autonomous time -----------------//

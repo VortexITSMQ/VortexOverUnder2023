@@ -10,10 +10,14 @@ extern brain Brain;
 //--------- Main auton functions ---------//
 void auton()
 {
-  Drivetrain.driveFor(fwd, 120, distanceUnits::cm);
-  Drivetrain.turnToHeading(90, rotationUnits::deg);
-  // Drivetrain.driveFor(fwd, DIST_TO_BALL_1, distanceUnits::cm);
-  // Drivetrain.turnToHeading(TURN_TO_BALL_1, rotationUnits::deg);
+  Drivetrain.driveFor(reverse, 30, distanceUnits::cm);
+  Drivetrain.turnToHeading(45, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 45, distanceUnits::cm);
+  Drivetrain.driveFor(reverse, 45, distanceUnits::cm);
+  Drivetrain.turnToHeading(0, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 30, distanceUnits::cm);
+  Drivetrain.turnToHeading(-85, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 68, distanceUnits::cm);
 }
 
 void skills()
