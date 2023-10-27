@@ -15,7 +15,7 @@
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
-#include "autonomous.h"
+#include "autonomus.h"
 #include "robot-config.h"
 #include "bits/stdc++.h"
 
