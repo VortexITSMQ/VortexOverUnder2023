@@ -1,15 +1,23 @@
 #include "vex.h"
 #include "constants.h"
+#include "vex_global.h"
+#include "vex_motorgroup.h"
 
 using namespace vex;
 using signature = vision::signature;
 using code = vision::code;
 
 bool WingAreOpen = false;
+bool ClimberIsActive = false;
 
 // A global instance of brain used for printing to the V5 Brain screen
 brain  Brain;
 controller Controller1 = controller(primary);
+
+// Climber
+motor ClimberLeft = motor(PORT20, ratio36_1, false);
+motor ClimberRight = motor(PORT10, ratio36_1, true);
+motor_group Climber = motor_group(ClimberLeft, ClimberRight);
 
 // Intake
 motor Collector = motor(PORT11, ratio18_1, true);
@@ -19,10 +27,10 @@ motor Wing = motor(PORT10, ratio18_1, true);
 
 // Chassis
 inertial DrivetrainInertial = inertial(PORT18);
-motor RightDriveA = motor(PORT1, ratio18_1, true);
-motor RightDriveB = motor(PORT3, ratio18_1, true);
-motor LeftDriveA = motor(PORT2, ratio18_1, false);
-motor LeftDriveB = motor(PORT4, ratio18_1, false);
+motor RightDriveA = motor(PORT11, ratio18_1, true);
+motor RightDriveB = motor(PORT11, ratio18_1, true);
+motor LeftDriveA = motor(PORT11, ratio18_1, false);
+motor LeftDriveB = motor(PORT11, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(LeftDriveA, LeftDriveB);
 motor_group RightDriveSmart = motor_group(RightDriveA, RightDriveB);
 smartdrive Drivetrain = smartdrive(LeftDriveA, RightDriveA, DrivetrainInertial, 
@@ -45,6 +53,15 @@ void Wings_cb(){
   }
 }
 
+void Climber_cb(){
+  while (Controller1.ButtonA.pressing() && !ClimberIsActive)
+    Climber.spin(reverse);
+  while (Controller1.ButtonA.pressing() && ClimberIsActive)
+    Climber.spin(fwd);
+  ClimberIsActive = !ClimberIsActive;
+  Climber.stop();
+}
+
 void Collector_cb(){
   while(Controller1.ButtonB.pressing())
     Collector.spin(fwd);
@@ -53,7 +70,7 @@ void Collector_cb(){
 
 int rc_auto_loop_function_Controller1() {
   Controller1.ButtonR1.pressed(Wings_cb);
-  Controller1.ButtonB.pressed(Collector_cb);
+  Controller1.ButtonA.pressed(Climber_cb);
   while(true) {
     chassis_control();
   }

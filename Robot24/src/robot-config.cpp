@@ -14,7 +14,10 @@ using code = vision::code;
 brain  Brain;
 controller Controller1 = controller(primary);
 // Catapult
-
+limit CatapultSwitch = limit(Brain.ThreeWirePort.A);
+motor CatapultLeft = motor(PORT10, ratio36_1, false);
+motor CatapultRight = motor(PORT20, ratio36_1, false);
+motor_group Catapult = motor_group(CatapultLeft, CatapultRight);
 // Recolector
 motor LeftRail = motor(PORT11, ratio18_1, false);
 motor RightRail = motor(PORT11, ratio18_1, true);
@@ -67,10 +70,21 @@ void Collector_cb(){
   Collector.stop(hold);
 }
 
+void CatapultSwitch_cb(){
+  Catapult.stop(hold);
+}
+
+void ReleaseCatapult_cb(){
+  Catapult.spin(fwd, 5, rpm);
+}
+
 int rc_auto_loop_function_Controller1() {
   Controller1.ButtonR1.pressed(Wings_cb);
   Controller1.ButtonA.pressed(Rail_cb);
   Controller1.ButtonB.pressed(Collector_cb);
+  Controller1.ButtonX.pressed(ReleaseCatapult_cb);
+  CatapultSwitch.pressed(CatapultSwitch_cb);
+  Catapult.spin(fwd, 5, rpm);
   while(true) {
     chassis_control();
   }
@@ -91,7 +105,6 @@ void vexcodeInit( void ) {
 void chassis_control(){
   int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
   int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
-  
   if (drivetrainLeftSideSpeed < JOYSTICK_DEADBAND && drivetrainLeftSideSpeed > -JOYSTICK_DEADBAND) {
     if (DrivetrainLNeedsToBeStopped_Controller1) {
       LeftDriveSmart.stop();

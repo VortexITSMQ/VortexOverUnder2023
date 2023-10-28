@@ -1,3 +1,4 @@
+#include "vex_motorgroup.h"
 using namespace vex;
 
 extern brain Brain;
@@ -14,6 +15,9 @@ extern motor LeftDriveB;
 extern motor_group LeftDriveSmart;
 extern motor_group RightDriveSmart;
 extern inertial DrivetrainInertial;
+extern motor ClimberRight;
+extern motor ClimberLeft;
+extern motor_group Climber;
 
 // Wings
 extern motor Wing;
