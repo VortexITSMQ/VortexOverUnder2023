@@ -119,3 +119,7 @@ desktop.ini
 #--------
 compile_commands.json
 Robot15/Robot15.v5code
+**/.cache/
+**/.vscode/
+*.v5code
+.gitignore

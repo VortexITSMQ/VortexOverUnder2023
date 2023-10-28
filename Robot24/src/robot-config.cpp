@@ -1,127 +1,133 @@
 #include "vex.h"
+#include "constants.h"
+
 
 using namespace vex;
 using signature = vision::signature;
 using code = vision::code;
 
 // Global varible that checks if the wings are open
-bool WingAreOpen = false;
+ bool WingAreOpen = false;
+ bool RailActive = false;
 
-// A global instance of brain used for printing to the V5 Brain screen
+//---------------------- Devices ----------------------//
 brain  Brain;
-
-// VEXcode device constructors
 controller Controller1 = controller(primary);
-
-// Right motors
+// Catapult
+limit CatapultSwitch = limit(Brain.ThreeWirePort.A);
+motor CatapultLeft = motor(PORT10, ratio36_1, false);
+motor CatapultRight = motor(PORT20, ratio36_1, false);
+motor_group Catapult = motor_group(CatapultLeft, CatapultRight);
+// Recolector
+motor LeftRail = motor(PORT11, ratio18_1, false);
+motor RightRail = motor(PORT11, ratio18_1, true);
+motor_group Rail = motor_group(LeftRail, RightRail);
+motor Collector = motor(PORT11, ratio18_1, true);
+// Wings
+motor Wing = motor(PORT10, ratio18_1, true);
+// Chassis
+inertial DrivetrainInertial = inertial(PORT12);
 motor RightDriveA = motor(PORT1, ratio18_1, true);
 motor RightDriveB = motor(PORT2, ratio18_1, true);
-
-// Left motors
-motor LeftDriveA = motor(PORT3, ratio18_1, false);
-motor LeftDriveB = motor(PORT4, ratio18_1, false);
-
-// Left motor groups
+motor LeftDriveA  = motor(PORT3, ratio18_1, false);
+motor LeftDriveB  = motor(PORT4, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(LeftDriveA, LeftDriveB);
-
-// Right motor groups
 motor_group RightDriveSmart = motor_group(RightDriveA, RightDriveB);
+smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, DrivetrainInertial, 
+  WHEEL_TRAVEL, TRACK_WIDTH, TRACK_BASE, mm, EXT_GEAR_RATIO);
 
-// Drivetrain
-drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.186, 310, 230, mm, 1);
 
-// Enable/Disable controller
+//---------------------- User control ----------------------//
 bool RemoteControlCodeEnabled = true;
-
-// Stop with controller inputs
 bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
-// Set pneumatic indexer
-// Wings
-pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.A);
-pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.B);
-
-// define a task that will handle monitoring inputs from Controller1
-int rc_auto_loop_function_Controller1() {
-  // process the controller input every 20 milliseconds
-  // update the motors based on the input values
-  while(true) {
-    if(RemoteControlCodeEnabled) {
-      // calculate the drivetrain motor velocities from the controller joystick axies
-      // left = Axis3 + Axis1
-      // right = Axis3 - Axis1
-      int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
-      int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
-      
-      // check if the value is inside of the deadband range
-      if (drivetrainLeftSideSpeed < 5 && drivetrainLeftSideSpeed > -5) {
-        // check if the left motor has already been stopped
-        if (DrivetrainLNeedsToBeStopped_Controller1) {
-          // stop the left drive motor
-          LeftDriveSmart.stop();
-          // tell the code that the left motor has been stopped
-          DrivetrainLNeedsToBeStopped_Controller1 = false;
-        }
-      } else {
-        // reset the toggle so that the deadband code know
-        DrivetrainLNeedsToBeStopped_Controller1 = true;
-      }
-      // check if the value is inside of the deadband range
-      if (drivetrainRightSideSpeed < 5 && drivetrainRightSideSpeed > -5) {
-        // check if the right motor has already been stopped
-        if (DrivetrainRNeedsToBeStopped_Controller1) {
-          // stop the right drive motor
-          RightDriveSmart.stop();
-          // tell the code that the right motor has been stopped
-          DrivetrainRNeedsToBeStopped_Controller1 = false;
-        }
-      } else {
-        // reset the toggle so that the deadband code knows to stop the right motor next time the input is in the deadband range
-        DrivetrainRNeedsToBeStopped_Controller1 = true;
-      }
-      
-      // only tell the left drive motor to spin if the values are not in the deadband range
-      if (DrivetrainLNeedsToBeStopped_Controller1) {
-        LeftDriveSmart.setVelocity(drivetrainLeftSideSpeed, percent);
-        LeftDriveSmart.spin(forward);
-      }
-      // only tell the right drive motor to spin if the values are not in the deadband range
-      if (DrivetrainRNeedsToBeStopped_Controller1) {
-        RightDriveSmart.setVelocity(drivetrainRightSideSpeed, percent);
-        RightDriveSmart.spin(forward);
-      }
-
-      // If we press the R1 button we open or close the wings
-      if (Controller1.ButtonR1.pressing()) {
-        //If the wings are open then we close them
-        if (WingAreOpen) {
-            IndexerRight.set(false);
-            IndexerLeft.set(false);
-            WingAreOpen = false;
-        }
-        //If the wings are close then we open them
-        else {
-            IndexerRight.set(true);
-            IndexerLeft.set(true);
-            WingAreOpen = true;
-        }
-        
-        // Wait for the R1 button to be released before continuing
-        while (Controller1.ButtonR1.pressing()) {}
-      }
-    }
-    // wait before repeating the process
-    wait(20, msec);
+void Wings_cb(){
+  //If the wings are open then we close them
+  if (!WingAreOpen) {
+    Wing.spinToPosition(100, degrees, true);
+    WingAreOpen = true;
   }
+  //If the wings are close then we open them
+  else {
+    Wing.spinToPosition(-100, degrees, true);
+    WingAreOpen = false;
+  }
+}
+
+void Rail_cb(){
+  while(Controller1.ButtonA.pressing() && !RailActive)
+    Rail.spin(fwd);
+  while(Controller1.ButtonA.pressing() && RailActive)
+    Rail.spin(reverse);
+  RailActive = !RailActive;
+  Rail.stop();
+}
+
+void Collector_cb(){
+  while(Controller1.ButtonB.pressing())
+    Collector.spin(fwd);
+  Collector.stop(hold);
+}
+
+void CatapultSwitch_cb(){
+  Catapult.stop(hold);
+}
+
+void ReleaseCatapult_cb(){
+  Catapult.spin(fwd, 5, rpm);
+}
+
+int rc_auto_loop_function_Controller1() {
+  Controller1.ButtonR1.pressed(Wings_cb);
+  Controller1.ButtonA.pressed(Rail_cb);
+  Controller1.ButtonB.pressed(Collector_cb);
+  Controller1.ButtonX.pressed(ReleaseCatapult_cb);
+  CatapultSwitch.pressed(CatapultSwitch_cb);
+  Catapult.spin(fwd, 5, rpm);
+  while(true) {
+    chassis_control();
+  }
+    
+  wait(20, msec);
   return 0;
 }
 
-/**
- * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
- * 
- * This should be called at the start of your int main function.
- */
 void vexcodeInit( void ) {
-  task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
+  wait(200, msec);
+  DrivetrainInertial.calibrate();
+  while (DrivetrainInertial.isCalibrating()) {
+    wait(25, msec);
+  }
+  wait(50, msec);
+}
+
+void chassis_control(){
+  int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
+  int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
+  if (drivetrainLeftSideSpeed < JOYSTICK_DEADBAND && drivetrainLeftSideSpeed > -JOYSTICK_DEADBAND) {
+    if (DrivetrainLNeedsToBeStopped_Controller1) {
+      LeftDriveSmart.stop();
+      DrivetrainLNeedsToBeStopped_Controller1 = false;
+    }
+  } else {
+    DrivetrainLNeedsToBeStopped_Controller1 = true;
+  }
+  if (drivetrainRightSideSpeed < JOYSTICK_DEADBAND && drivetrainRightSideSpeed > -JOYSTICK_DEADBAND) {
+    if (DrivetrainRNeedsToBeStopped_Controller1) {
+      RightDriveSmart.stop();
+      DrivetrainRNeedsToBeStopped_Controller1 = false;
+    }
+  } else {
+    DrivetrainRNeedsToBeStopped_Controller1 = true;
+  }
+  
+  if (DrivetrainLNeedsToBeStopped_Controller1) {
+    LeftDriveSmart.setVelocity(drivetrainLeftSideSpeed, percent);
+    LeftDriveSmart.spin(forward);
+  }
+  if (DrivetrainRNeedsToBeStopped_Controller1) {
+    RightDriveSmart.setVelocity(drivetrainRightSideSpeed, percent);
+    RightDriveSmart.spin(forward);
+  }
 }

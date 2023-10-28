@@ -1,24 +1,35 @@
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       C:\Users\nerij                                            */
-/*    Created:      Wed Apr 19 2023                                           */
-/*    Description:  V5 project                                                */
+/*    Author:       VEX                                                       */
+/*    Created:      Thu Sep 26 2019                                           */
+/*    Description:  Competition Template                                      */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Drivetrain           drivetrain    1, 10           
+// Controller1          controller                    
+// ---- END VEXCODE CONFIGURED DEVICES ----
+
 #include "vex.h"
-#include "autonomous.h"
+#include "autonomus.h"
 #include "robot-config.h"
+#include "bits/stdc++.h"
 
 using namespace vex;
-competition Competition; 
+competition Competition;
+
+// define your global instances of motors and other devices here
 
 void display_info_dinamic(){
-  std::cout << "Im working " << std::endl;
+  std::cout << "I'm working " << std::endl;
 }
 
 void pre_auton(void) {
+  // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
 }
 
@@ -36,9 +47,9 @@ int main() {
 
   pre_auton();
 
+  // Prevent main from exiting with an infinite loop.
   while (true) {
     display_info_dinamic();
-
     wait(100, msec);
   }
 }

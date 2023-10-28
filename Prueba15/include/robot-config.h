@@ -16,14 +16,12 @@ extern motor_group RightDriveSmart;
 extern inertial DrivetrainInertial;
 
 // Wings
- extern motor Wing;
+extern motor Wing;
 
- // Collector
-extern motor LeftRail;
-extern motor RightRail;
+// Intake
 extern motor Collector;
 
 // Driver Control Function
 extern int rc_auto_loop_function_Controller1();
-void  vexcodeInit( void );
-void  chassis_control();
+void vexcodeInit(void);
+void chassis_control();
