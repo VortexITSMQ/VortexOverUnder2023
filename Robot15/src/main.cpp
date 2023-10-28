@@ -25,7 +25,8 @@ competition Competition;
 // define your global instances of motors and other devices here
 
 void display_info_dinamic(){
-  std::cout << "I'm working " << std::endl;
+  std::cout << DrivetrainInertial.heading() << std::endl;
+  Brain.Screen.print(Drivetrain.heading());
 }
 
 void pre_auton(void) {

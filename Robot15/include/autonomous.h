@@ -7,7 +7,13 @@ extern brain Brain;
 
 //------- Aux function definition -------//
 void inertial_turn(double desired_angle){
-  while(fabs(DrivetrainInertial.heading() - desired_angle) > 2.0){
+  // Calibrar el sensor inercial
+  DrivetrainInertial.calibrate();
+  while (DrivetrainInertial.isCalibrating()) {
+    // Esperar hasta que la calibración se complete
+  }
+
+  while (fabs(DrivetrainInertial.heading() - desired_angle) > 2.0) {
     Drivetrain.setTurnVelocity(20, percent);
     Drivetrain.turn(left);
   }
@@ -16,17 +22,22 @@ void inertial_turn(double desired_angle){
 //--------- Main auton functions ---------//
 void auton()
 {
+  DrivetrainInertial.calibrate();
   //Drivetrain.setDriveVelocity(80, pct);
   //Complete route of ROBOT 24
-  //inertial_turn(45);
-  Drivetrain.driveFor(fwd, 100, distanceUnits::cm);
-  inertial_turn(45);
+  //DrivetrainInertial.calibrate();S
+  Drivetrain.driveFor(fwd, 130, distanceUnits::cm);
+  //inertial_turn(45);S
+  Drivetrain.turnToHeading(45, rotationUnits::deg);
   Drivetrain.driveFor(fwd, 10, distanceUnits::cm);
   Drivetrain.driveFor(reverse, 20, distanceUnits::cm);
-  inertial_turn(-135);
-  Drivetrain.driveFor(reverse, 120, distanceUnits::cm);
-
-
+  //inertial_turn(-135);
+  Drivetrain.turnToHeading(-90, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 30, distanceUnits::cm);
+  Drivetrain.turnToHeading(90, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
+  Drivetrain.turnToHeading(-90, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
 }
 
 void skills()
