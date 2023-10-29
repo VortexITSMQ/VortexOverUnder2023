@@ -26,18 +26,20 @@ void auton()
   //Drivetrain.setDriveVelocity(80, pct);
   //Complete route of ROBOT 24
   //DrivetrainInertial.calibrate();S
-  Drivetrain.driveFor(fwd, 130, distanceUnits::cm);
+  Drivetrain.driveFor(reverse, 123, distanceUnits::cm);
   //inertial_turn(45);S
-  Drivetrain.turnToHeading(45, rotationUnits::deg);
-  Drivetrain.driveFor(fwd, 10, distanceUnits::cm);
-  Drivetrain.driveFor(reverse, 20, distanceUnits::cm);
-  //inertial_turn(-135);
-  Drivetrain.turnToHeading(-90, rotationUnits::deg);
-  Drivetrain.driveFor(fwd, 30, distanceUnits::cm);
-  Drivetrain.turnToHeading(90, rotationUnits::deg);
+  Drivetrain.turnToHeading(43, rotationUnits::deg);
+  Climber.spin(reverse, 60, percent);
+  wait(4, seconds);
+  Climber.stop();
   Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
-  Drivetrain.turnToHeading(-90, rotationUnits::deg);
-  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
+  Drivetrain.turnToHeading(-55, rotationUnits::deg);
+  Climber.spin(fwd, 60, percent);
+  wait(2, seconds);
+  Climber.stop();
+  Drivetrain.driveFor(reverse, 45, distanceUnits::cm);
+  // Drivetrain.turnToHeading(-90, rotationUnits::deg);
+
 }
 
 void skills()
