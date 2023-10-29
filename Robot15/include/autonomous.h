@@ -16,15 +16,22 @@ void inertial_turn(double desired_angle){
 //--------- Main auton functions ---------//
 void auton()
 {
+  DrivetrainInertial.calibrate();
   //Drivetrain.setDriveVelocity(80, pct);
   //Complete route of ROBOT 24
-  //inertial_turn(45);
-  Drivetrain.driveFor(fwd, 100, distanceUnits::cm);
-  inertial_turn(45);
-  Drivetrain.driveFor(fwd, 10, distanceUnits::cm);
-  Drivetrain.driveFor(reverse, 20, distanceUnits::cm);
-  inertial_turn(-135);
-  Drivetrain.driveFor(reverse, 120, distanceUnits::cm);
+  //DrivetrainInertial.calibrate();S
+  // Drivetrain.driveFor(fwd, 130, distanceUnits::cm);
+  //inertial_turn(45);S
+  Drivetrain.turnToHeading(45, rotationUnits::deg);
+  // Drivetrain.driveFor(fwd, 10, distanceUnits::cm);
+  // Drivetrain.driveFor(reverse, 20, distanceUnits::cm);
+  // //inertial_turn(-135);
+  // Drivetrain.turnToHeading(-90, rotationUnits::deg);
+  // Drivetrain.driveFor(fwd, 30, distanceUnits::cm);
+  // Drivetrain.turnToHeading(90, rotationUnits::deg);
+  // Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
+  // Drivetrain.turnToHeading(-90, rotationUnits::deg);
+  // Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
 }
 
 void skills()
