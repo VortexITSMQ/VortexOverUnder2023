@@ -11,6 +11,7 @@ bool WingAreOpen = false;
 bool ClimberIsActive = false;
 
 // A global instance of brain used for printing to the V5 Brain screen
+
 brain  Brain;
 controller Controller1 = controller(primary);
 
@@ -99,6 +100,7 @@ void Collector_cb(){
   Collector.stop(hold);
 }
 
+
 int rc_auto_loop_function_Controller1() {
   Controller1.ButtonR1.pressed(Wings_cb);
   Controller1.ButtonA.pressed(ClimberFast_fwd_cb);
@@ -114,6 +116,7 @@ int rc_auto_loop_function_Controller1() {
 }
 
 void vexcodeInit( void ) {
+
   wait(200, msec);
   DrivetrainInertial.calibrate();
   while (DrivetrainInertial.isCalibrating()) {
@@ -152,3 +155,4 @@ void chassis_control(){
     RightDriveSmart.spin(forward);
   }
 }
+
