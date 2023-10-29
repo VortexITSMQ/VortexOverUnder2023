@@ -9,6 +9,7 @@ using code = vision::code;
 // Global varible that checks if the wings are open
  bool WingAreOpen = false;
  bool RailActive = false;
+ bool LilArmOpen = false;
 
 //---------------------- Devices ----------------------//
 brain  Brain;
@@ -19,12 +20,16 @@ motor CatapultLeft = motor(PORT10, ratio36_1, false);
 motor CatapultRight = motor(PORT20, ratio36_1, false);
 motor_group Catapult = motor_group(CatapultLeft, CatapultRight);
 // Recolector
-motor LeftRail = motor(PORT11, ratio18_1, false);
-motor RightRail = motor(PORT11, ratio18_1, true);
+motor LeftRail = motor(PORT6, ratio18_1, false);
+motor RightRail = motor(PORT16, ratio18_1, true);
 motor_group Rail = motor_group(LeftRail, RightRail);
-motor Collector = motor(PORT11, ratio18_1, true);
+motor CollectorFront = motor(PORT11, ratio18_1, false); 
+motor CollectorBack = motor(PORT12, ratio18_1, true);
 // Wings
-motor Wing = motor(PORT10, ratio18_1, true);
+pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.B);
+pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.C);
+// lil arm
+motor LilArm = motor(PORT10, ratio18_1, true);
 // Chassis
 inertial DrivetrainInertial = inertial(PORT12);
 motor RightDriveA = motor(PORT1, ratio18_1, true);
@@ -42,15 +47,30 @@ bool RemoteControlCodeEnabled = true;
 bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
-void Wings_cb(){
+void LilArm_cb(){
   //If the wings are open then we close them
-  if (!WingAreOpen) {
-    Wing.spinToPosition(100, degrees, true);
-    WingAreOpen = true;
+  if (!LilArmOpen) {
+    LilArm.spinToPosition(100, degrees, true);
+    LilArmOpen = true;
   }
   //If the wings are close then we open them
   else {
-    Wing.spinToPosition(-100, degrees, true);
+    LilArm.spinToPosition(-100, degrees, true);
+    LilArmOpen = false;
+  }
+}
+
+void Wings_cb(){
+  //If the wings are open then we close them
+  if (!WingAreOpen) {
+    IndexerLeft.open();
+    IndexerRight.open();
+    WingAreOpen = true;
+  }
+  //If the wings are closed then we open them
+  else {
+    IndexerLeft.close();
+    IndexerRight.close();
     WingAreOpen = false;
   }
 }
@@ -59,32 +79,37 @@ void Rail_cb(){
   while(Controller1.ButtonA.pressing() && !RailActive)
     Rail.spin(fwd);
   while(Controller1.ButtonA.pressing() && RailActive)
-    Rail.spin(reverse);
+    Rail.spin(reverse, 90, percent);
   RailActive = !RailActive;
   Rail.stop();
 }
 
 void Collector_cb(){
-  while(Controller1.ButtonB.pressing())
-    Collector.spin(fwd);
-  Collector.stop(hold);
+  while(Controller1.ButtonR2.pressing()){
+    CollectorFront.spin(fwd);
+    CollectorBack.spin(fwd, 80, percent);
+  }
+  CollectorFront.stop();
+  CollectorBack.stop();
 }
 
 void CatapultSwitch_cb(){
   Catapult.stop(hold);
+  printf("catapultswitch\n");
 }
 
 void ReleaseCatapult_cb(){
-  Catapult.spin(fwd, 5, rpm);
+  Catapult.spin(fwd, 40, rpm);
 }
 
 int rc_auto_loop_function_Controller1() {
   Controller1.ButtonR1.pressed(Wings_cb);
+  // Controller1.ButtonR2.pressed(LilArm_cb);
   Controller1.ButtonA.pressed(Rail_cb);
-  Controller1.ButtonB.pressed(Collector_cb);
+  Controller1.ButtonR2.pressed(Collector_cb);
   Controller1.ButtonX.pressed(ReleaseCatapult_cb);
   CatapultSwitch.pressed(CatapultSwitch_cb);
-  Catapult.spin(fwd, 5, rpm);
+  Catapult.spin(fwd, 30, rpm);
   while(true) {
     chassis_control();
   }

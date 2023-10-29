@@ -25,8 +25,6 @@ void auton()
   Drivetrain.driveFor(reverse, 20, distanceUnits::cm);
   inertial_turn(-135);
   Drivetrain.driveFor(reverse, 120, distanceUnits::cm);
-
-
 }
 
 void skills()
