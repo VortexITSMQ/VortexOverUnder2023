@@ -15,22 +15,23 @@ brain  Brain;
 controller Controller1 = controller(primary);
 
 // Climber
-motor ClimberLeft = motor(PORT20, ratio36_1, false);
+motor ClimberLeft = motor(PORT16, ratio36_1, false);
 motor ClimberRight = motor(PORT10, ratio36_1, true);
 motor_group Climber = motor_group(ClimberLeft, ClimberRight);
 
-// Intake
+// Collector
 motor Collector = motor(PORT11, ratio18_1, true);
 
 // Wings
-motor Wing = motor(PORT10, ratio18_1, true);
+pneumatics IndexerRight = pneumatics(Brain.ThreeWirePort.A);
+pneumatics IndexerLeft = pneumatics(Brain.ThreeWirePort.B);
 
 // Chassis
-inertial DrivetrainInertial = inertial(PORT18);
+inertial DrivetrainInertial = inertial(PORT13);
 motor RightDriveA = motor(PORT11, ratio18_1, true);
-motor RightDriveB = motor(PORT11, ratio18_1, true);
-motor LeftDriveA = motor(PORT11, ratio18_1, false);
-motor LeftDriveB = motor(PORT11, ratio18_1, false);
+motor RightDriveB = motor(PORT12, ratio18_1, true);
+motor LeftDriveA = motor(PORT1, ratio18_1, false);
+motor LeftDriveB = motor(PORT2, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(LeftDriveA, LeftDriveB);
 motor_group RightDriveSmart = motor_group(RightDriveA, RightDriveB);
 smartdrive Drivetrain = smartdrive(LeftDriveA, RightDriveA, DrivetrainInertial, 
@@ -40,25 +41,55 @@ bool RemoteControlCodeEnabled = true;
 bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
+// void Wings_cb(){
+//   //If the wings are open then we close them
+//   if (!WingAreOpen) {
+//     Wing.spinToPosition(100, degrees, true);
+//     WingAreOpen = true;
+//   }
+//   //If the wings are close then we open them
+//   else {
+//     Wing.spinToPosition(-100, degrees, true);
+//     WingAreOpen = false;
+//   }
+// }
+
 void Wings_cb(){
   //If the wings are open then we close them
   if (!WingAreOpen) {
-    Wing.spinToPosition(100, degrees, true);
+    IndexerLeft.open();
+    IndexerRight.open();
     WingAreOpen = true;
   }
   //If the wings are close then we open them
   else {
-    Wing.spinToPosition(-100, degrees, true);
+    IndexerLeft.close();
+    IndexerRight.close();
     WingAreOpen = false;
   }
 }
 
-void Climber_cb(){
-  while (Controller1.ButtonA.pressing() && !ClimberIsActive)
+void ClimberFast_fwd_cb(){
+  while (Controller1.ButtonA.pressing())
+    Climber.spin(reverse, 100, percent);
+  Climber.stop();
+}
+
+void ClimberFast_bwd_cb(){
+  while (Controller1.ButtonB.pressing())
+    Climber.spin(fwd, 100, percent);
+  Climber.stop();
+}
+
+void ClimberSlow_fwd_cb(){
+  while (Controller1.ButtonX.pressing())
     Climber.spin(reverse);
-  while (Controller1.ButtonA.pressing() && ClimberIsActive)
+  Climber.stop();
+}
+
+void ClimberSlow_bwd_cb(){
+  while (Controller1.ButtonY.pressing())
     Climber.spin(fwd);
-  ClimberIsActive = !ClimberIsActive;
   Climber.stop();
 }
 
@@ -70,7 +101,10 @@ void Collector_cb(){
 
 int rc_auto_loop_function_Controller1() {
   Controller1.ButtonR1.pressed(Wings_cb);
-  Controller1.ButtonA.pressed(Climber_cb);
+  Controller1.ButtonA.pressed(ClimberFast_fwd_cb);
+  Controller1.ButtonB.pressed(ClimberFast_bwd_cb);
+  Controller1.ButtonX.pressed(ClimberSlow_fwd_cb);
+  Controller1.ButtonY.pressed(ClimberSlow_bwd_cb);
   while(true) {
     chassis_control();
   }
