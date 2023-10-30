@@ -23,22 +23,76 @@ void inertial_turn(double desired_angle){
 void auton()
 {
   DrivetrainInertial.calibrate();
-  //Drivetrain.setDriveVelocity(80, pct);
+  Drivetrain.setDriveVelocity(30, pct);
   //Complete route of ROBOT 24
-  //DrivetrainInertial.calibrate();S
-  Drivetrain.driveFor(reverse, 123, distanceUnits::cm);
-  //inertial_turn(45);S
-  Drivetrain.turnToHeading(43, rotationUnits::deg);
-  Climber.spin(reverse, 60, percent);
-  wait(4, seconds);
+  
+  //Primera ida
+  Drivetrain.driveFor(fwd, 65, distanceUnits::cm);
+  
+  //Vuelta para empujar el trible
+  Drivetrain.turnToHeading(-20, rotationUnits::deg, 110, rpm, true);
+  IndexerLeft.set(true);
+  Drivetrain.turnToHeading(-180, rotationUnits::deg, 100, rpm, true);
+  IndexerLeft.set(false);
+
+  //Ida al triable rojo
+  Drivetrain.setDriveVelocity(55, pct);
+  Drivetrain.driveFor(reverse, 60, distanceUnits::cm);
+
+  //se acerca al trible rojo para agarrarlo
+  Drivetrain.turnToHeading(-135, rotationUnits::deg, 100, rpm, true);
+  Drivetrain.driveFor(reverse, 15, distanceUnits::cm);
+
+  //Agarra el trible
+  Climber.spin(reverse, 45, percent);
+  wait(5.7, seconds);
   Climber.stop();
-  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
-  Drivetrain.turnToHeading(-55, rotationUnits::deg);
-  Climber.spin(fwd, 60, percent);
-  wait(2, seconds);
+
+  //Saca el trible de su spot
+  Drivetrain.driveFor(fwd, 30, distanceUnits::cm);
+
+  //Giramos al direccion del gol
+  Drivetrain.turnToHeading(-225, rotationUnits::deg, 100, rpm, true);
+
+  //Levantamos el escalador para que no se atore con el gol
+  Climber.spin(fwd, 50, percent);
+  wait(3, seconds);
   Climber.stop();
+
+  Drivetrain.turnToHeading(- , rotationUnits::deg, 100, rpm, true);
+
+
+  DrivetrainInertial.calibrate();
+  while (DrivetrainInertial.isCalibrating()) {
+    wait(25, msec);
+  }
+
+
+  /*
+  //empujamos el trible para acercarlo al gol
   Drivetrain.driveFor(reverse, 45, distanceUnits::cm);
-  // Drivetrain.turnToHeading(-90, rotationUnits::deg);
+
+  //Metemos el trible rojo al gol
+  Drivetrain.turnToHeading(-270, rotationUnits::deg, 100, rpm, true);
+  Drivetrain.driveFor(reverse, 10, distanceUnits::cm);
+  wait(2, seconds);
+
+  // Nos alejamos del gol
+  Drivetrain.driveFor(fwd, 10, distanceUnits::cm);
+  Drivetrain.turnToHeading(0, rotationUnits::deg, 100, rpm, true);
+  Drivetrain.driveFor(reverse, 40, distanceUnits::cm);
+
+  Drivetrain.turnToHeading(-80, rotationUnits::deg, 100, rpm, true);
+  Drivetrain.driveFor(reverse, 40, distanceUnits::cm);
+  Drivetrain.turnToHeading(0, rotationUnits::deg, 100, rpm, true);
+  Drivetrain.driveFor(reverse, 35, distanceUnits::cm);
+
+  Climber.spin(reverse, 45, percent);
+  wait(1, seconds);
+  Climber.stop();
+
+  Drivetrain.driveFor(fwd, 35, distanceUnits::cm);
+*/
 
 }
 

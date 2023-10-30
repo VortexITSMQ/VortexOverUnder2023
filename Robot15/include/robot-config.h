@@ -18,6 +18,8 @@ extern inertial DrivetrainInertial;
 extern motor ClimberRight;
 extern motor ClimberLeft;
 extern motor_group Climber;
+extern pneumatics IndexerLeft;
+extern pneumatics IndexerRight;
 
 // Wings
 extern motor Wing;
