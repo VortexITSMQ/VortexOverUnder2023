@@ -27,10 +27,10 @@ motor Collector = motor(PORT11, ratio18_1, true);
 motor Wing = motor(PORT10, ratio18_1, true);
 // Chassis
 inertial DrivetrainInertial = inertial(PORT12);
-motor RightDriveA = motor(PORT1, ratio18_1, true);
-motor RightDriveB = motor(PORT2, ratio18_1, true);
-motor LeftDriveA  = motor(PORT3, ratio18_1, false);
-motor LeftDriveB  = motor(PORT4, ratio18_1, false);
+motor RightDriveA = motor(PORT2, ratio18_1, true);
+motor RightDriveB = motor(PORT9, ratio18_1, true);
+motor LeftDriveA  = motor(PORT11, ratio18_1, false);
+motor LeftDriveB  = motor(PORT19, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(LeftDriveA, LeftDriveB);
 motor_group RightDriveSmart = motor_group(RightDriveA, RightDriveB);
 smartdrive Drivetrain = smartdrive(LeftDriveSmart, RightDriveSmart, DrivetrainInertial, 
