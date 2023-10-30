@@ -1,6 +1,7 @@
 #include <iostream>
 #include "constants.h"
 #include "robot-config.h"
+#include "vex_global.h"
 
 using namespace vex;
 extern brain Brain;
@@ -23,8 +24,7 @@ void inertial_turn(double desired_angle){
 void auton()
 {
   DrivetrainInertial.calibrate();
-  Drivetrain.setDriveVelocity(30, pct);
-  //Complete route of ROBOT 24
+  Drivetrain.setDriveVelocity(28, pct);
   
   //Primera ida
   Drivetrain.driveFor(fwd, 65, distanceUnits::cm);
@@ -36,12 +36,12 @@ void auton()
   IndexerLeft.set(false);
 
   //Ida al triable rojo
-  Drivetrain.setDriveVelocity(55, pct);
+  Drivetrain.setDriveVelocity(28, pct);
   Drivetrain.driveFor(reverse, 60, distanceUnits::cm);
 
   //se acerca al trible rojo para agarrarlo
   Drivetrain.turnToHeading(-135, rotationUnits::deg, 100, rpm, true);
-  Drivetrain.driveFor(reverse, 15, distanceUnits::cm);
+  Drivetrain.driveFor(reverse, 13, distanceUnits::cm);
 
   //Agarra el trible
   Climber.spin(reverse, 45, percent);
@@ -59,41 +59,33 @@ void auton()
   wait(3, seconds);
   Climber.stop();
 
-  Drivetrain.turnToHeading(- , rotationUnits::deg, 100, rpm, true);
+  // Vuelta de 180 grados para golpear con alitas
+  Drivetrain.turnToHeading(-45, rotationUnits::deg, 100, rpm, true);
 
-
+  // Calibracion para no acumular error
   DrivetrainInertial.calibrate();
   while (DrivetrainInertial.isCalibrating()) {
     wait(25, msec);
   }
 
+  // Abrir alitas
+  IndexerLeft.set(true);
+  IndexerRight.set(true);
+  
+  // Golpear triballs 
+  Drivetrain.driveFor(fwd, 40, distanceUnits::cm);
+  IndexerLeft.set(false);
+  IndexerRight.set(false);
 
-  /*
-  //empujamos el trible para acercarlo al gol
-  Drivetrain.driveFor(reverse, 45, distanceUnits::cm);
+  // Regresar
+  Drivetrain.driveFor(reverse, 50, distanceUnits::cm);
 
-  //Metemos el trible rojo al gol
-  Drivetrain.turnToHeading(-270, rotationUnits::deg, 100, rpm, true);
-  Drivetrain.driveFor(reverse, 10, distanceUnits::cm);
-  wait(2, seconds);
+  // Dar vuelta hacia el pasillo
+  Drivetrain.turnToHeading(50, rotationUnits::deg, 100, rpm, true);
 
-  // Nos alejamos del gol
-  Drivetrain.driveFor(fwd, 10, distanceUnits::cm);
-  Drivetrain.turnToHeading(0, rotationUnits::deg, 100, rpm, true);
-  Drivetrain.driveFor(reverse, 40, distanceUnits::cm);
-
-  Drivetrain.turnToHeading(-80, rotationUnits::deg, 100, rpm, true);
-  Drivetrain.driveFor(reverse, 40, distanceUnits::cm);
-  Drivetrain.turnToHeading(0, rotationUnits::deg, 100, rpm, true);
-  Drivetrain.driveFor(reverse, 35, distanceUnits::cm);
-
-  Climber.spin(reverse, 45, percent);
-  wait(1, seconds);
-  Climber.stop();
-
-  Drivetrain.driveFor(fwd, 35, distanceUnits::cm);
-*/
-
+  // Tocar poste
+  Climber.stop(hold);
+  Drivetrain.driveFor(reverse, 100, distanceUnits::cm);
 }
 
 void skills()
