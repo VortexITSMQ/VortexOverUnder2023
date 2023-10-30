@@ -27,3 +27,22 @@ extern motor Collector;
 extern int rc_auto_loop_function_Controller1();
 void  vexcodeInit( void );
 void  chassis_control();
+
+//RAIL
+extern motor LeftRail;
+extern motor RightRail;
+extern motor_group Rail;
+
+//COLLECTOR
+extern motor CollectorFront; 
+extern motor CollectorBack;
+
+//catapult
+extern limit CatapultSwitch;
+extern motor CatapultLeft;
+extern motor CatapultRight;
+extern motor_group Catapult;
+
+
+//------- Aux function definition -------//
+extern void CatapultSwitch_cb();

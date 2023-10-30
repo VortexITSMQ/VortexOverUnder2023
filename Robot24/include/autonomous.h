@@ -5,20 +5,56 @@
 using namespace vex;
 extern brain Brain;
 
-//------- Aux function definition -------//
 
 //--------- Main auton functions ---------//
 void auton()
 {
   //Complete route of ROBOT 24
-  Drivetrain.driveFor(reverse, 30, distanceUnits::cm);
+  Drivetrain.setDriveVelocity(45, pct);
+  
+  //DESCOMENTAR CUANDO JALE LOS ENGRANES
+  //CatapultSwitch.pressed(CatapultSwitch_cb);
+  //Catapult.spin(fwd);
+  
+  //Ida a triball
+  Drivetrain.driveFor(reverse, 43, distanceUnits::cm);
   Drivetrain.turnToHeading(45, rotationUnits::deg);
-  Drivetrain.driveFor(fwd, 45, distanceUnits::cm);
-  Drivetrain.driveFor(reverse, 45, distanceUnits::cm);
-  Drivetrain.turnToHeading(0, rotationUnits::deg);
-  Drivetrain.driveFor(fwd, 30, distanceUnits::cm);
-  Drivetrain.turnToHeading(-78, rotationUnits::deg);
-  Drivetrain.driveFor(fwd, 86, distanceUnits::cm);
+  Drivetrain.driveFor(fwd, 50, distanceUnits::cm);
+
+  //Recoger el triball
+  CollectorFront.spin(fwd);
+  CollectorBack.spin(fwd, 80, percent);
+  Rail.spin(reverse);
+  wait(2.5, seconds);
+
+  Rail.stop(hold);
+
+  Rail.spin(fwd, 90, percent);
+  wait(.6, seconds);
+  Rail.stop(hold);
+
+  //IDA AL TUBO NEGRO
+  Drivetrain.driveFor(reverse, 90, distanceUnits::cm);
+  Drivetrain.turnToHeading(90, rotationUnits::deg);
+  Drivetrain.driveFor(reverse, 40, distanceUnits::cm);
+  CollectorBack.stop();
+  CollectorFront.stop();
+
+  Drivetrain.setDriveVelocity(10, pct);
+
+  //Catapult.spin(fwd, 40, rpm);
+
+  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
+  Drivetrain.turnToHeading(-70., rotationUnits::deg);
+  //Drivetrain.driveFor(fwd, 5, distanceUnits::cm);
+  Rail.spin(reverse);
+  wait(4, seconds);
+  Rail.stop(hold);
+  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
+
+
+
+
 }
 
 void skills()
