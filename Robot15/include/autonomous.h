@@ -41,7 +41,7 @@ void auton()
 
   //se acerca al trible rojo para agarrarlo
   Drivetrain.turnToHeading(-135, rotationUnits::deg, 100, rpm, true);
-  Drivetrain.driveFor(reverse, 13, distanceUnits::cm);
+  Drivetrain.driveFor(reverse, 11, distanceUnits::cm);
 
   //Agarra el trible
   Climber.spin(reverse, 45, percent);
@@ -73,9 +73,11 @@ void auton()
   IndexerRight.set(true);
   
   // Golpear triballs 
+  Drivetrain.setDriveVelocity(40, pct);
   Drivetrain.driveFor(fwd, 40, distanceUnits::cm);
   IndexerLeft.set(false);
   IndexerRight.set(false);
+  Drivetrain.setDriveVelocity(28, pct);
 
   // Regresar
   Drivetrain.driveFor(reverse, 50, distanceUnits::cm);

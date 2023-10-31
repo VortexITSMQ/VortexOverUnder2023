@@ -65,13 +65,13 @@ void Wings_cb(){
 
 void Climber_fwd_cb(){
   while (Controller1.ButtonUp.pressing())
-    Climber.spin(reverse);
+    Climber.spin(reverse, 70, percent);
   Climber.stop();
 }
 
 void Climber_bwd_cb(){
   while (Controller1.ButtonDown.pressing())
-    Climber.spin(fwd);
+    Climber.spin(fwd, 70, percent);
   Climber.stop();
 }
 
@@ -105,10 +105,8 @@ void vexcodeInit( void ) {
 }
 
 void chassis_control(){
-  int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
-  int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
-  drivetrainLeftSideSpeed = fmax(drivetrainLeftSideSpeed, 70);
-  drivetrainRightSideSpeed = fmax(drivetrainRightSideSpeed, 70);
+  int drivetrainLeftSideSpeed = (Controller1.Axis3.position() + (0.7*Controller1.Axis1.position()))/2.0;
+  int drivetrainRightSideSpeed = (Controller1.Axis3.position() - (0.7*Controller1.Axis1.position()))/2.0;
   
   if (drivetrainLeftSideSpeed < JOYSTICK_DEADBAND && drivetrainLeftSideSpeed > -JOYSTICK_DEADBAND) {
     if (DrivetrainLNeedsToBeStopped_Controller1) {
