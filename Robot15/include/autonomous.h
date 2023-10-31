@@ -90,6 +90,23 @@ void auton()
 
 void skills()
 {
+  DrivetrainInertial.calibrate();
+  while (DrivetrainInertial.isCalibrating()) {
+    wait(25, msec);
+  }
+  Drivetrain.setDriveVelocity(28, pct);
+  
+  //Primera ida
+  Drivetrain.driveFor(fwd, 120, distanceUnits::cm);
+
+  //se acerca al trible rojo para agarrarlo
+  Drivetrain.turnToHeading(-90, rotationUnits::deg, 100, rpm, true);
+  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
+  
+  Drivetrain.turnToHeading(-180, rotationUnits::deg, 100, rpm, true);
+  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
+  
+  Drivetrain.turnToHeading(-90, rotationUnits::deg, 100, rpm, true);
 }
 
 void move_to_coordinate(double target_x, double target_y, double target_heading)

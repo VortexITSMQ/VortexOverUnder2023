@@ -63,12 +63,15 @@ void Wings_cb(){
   }
 }
 
-void Climber_cb(){
-  while (Controller1.ButtonA.pressing() && !ClimberIsActive)
+void Climber_fwd_cb(){
+  while (Controller1.ButtonUp.pressing())
     Climber.spin(reverse);
-  while (Controller1.ButtonA.pressing() && ClimberIsActive)
+  Climber.stop();
+}
+
+void Climber_bwd_cb(){
+  while (Controller1.ButtonDown.pressing())
     Climber.spin(fwd);
-  ClimberIsActive = !ClimberIsActive;
   Climber.stop();
 }
 
@@ -80,8 +83,9 @@ void Collector_cb(){
 
 
 int rc_auto_loop_function_Controller1() {
-  Controller1.ButtonR1.pressed(Wings_cb);
-  Controller1.ButtonA.pressed(Climber_cb);
+  Controller1.ButtonB.pressed(Wings_cb);
+  Controller1.ButtonUp.pressed(Climber_fwd_cb);
+  Controller1.ButtonDown.pressed(Climber_bwd_cb);
   while(true) {
     chassis_control();
   }

@@ -87,10 +87,19 @@ void Rail_bwd_cb(){
   Rail.stop(hold);
 }
 
-void Collector_cb(){
+void Collector_fwd_cb(){
   while(Controller1.ButtonR2.pressing()){
     CollectorFront.spin(fwd);
     CollectorBack.spin(fwd, 80, percent);
+  }
+  CollectorFront.stop();
+  CollectorBack.stop();
+}
+
+void Collector_bwd_cb(){
+  while(Controller1.ButtonL2.pressing()){
+    CollectorFront.spin(reverse);
+    CollectorBack.spin(reverse, 80, percent);
   }
   CollectorFront.stop();
   CollectorBack.stop();
@@ -110,7 +119,8 @@ int rc_auto_loop_function_Controller1() {
   // Controller1.ButtonR2.pressed(LilArm_cb);
   Controller1.ButtonUp.pressed(Rail_fwd_cb);
   Controller1.ButtonDown.pressed(Rail_bwd_cb);
-  Controller1.ButtonR2.pressed(Collector_cb);
+  Controller1.ButtonR2.pressed(Collector_fwd_cb);
+  Controller1.ButtonL2.pressed(Collector_bwd_cb);
   Controller1.ButtonX.pressed(ReleaseCatapult_cb);
   CatapultSwitch.pressed(CatapultSwitch_cb);
   Catapult.spin(fwd, 30, rpm);

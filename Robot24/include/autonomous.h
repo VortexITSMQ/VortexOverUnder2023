@@ -63,6 +63,43 @@ void auton()
 
 void skills()
 {
+   //Complete route of ROBOT 24
+  Drivetrain.setDriveVelocity(45, pct);
+  
+  //DESCOMENTAR CUANDO JALE LOS ENGRANES
+  CatapultSwitch.pressed(CatapultSwitch_cb);
+  Catapult.spin(fwd);
+  
+  //Ida a triball
+  Drivetrain.driveFor(reverse, 35, distanceUnits::cm);
+  Drivetrain.turnToHeading(45, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 46, distanceUnits::cm);
+
+  // recolectar y lanzar triballs
+  int i;
+  for(i=0;i<2;i++){ 
+    //Recoger el triball
+    CollectorFront.spin(fwd);
+    CollectorBack.spin(fwd, 80, percent);
+    Rail.spin(reverse);
+    wait(3.5, seconds);
+
+    Rail.stop(hold);
+
+    Rail.spin(fwd, 90, percent);
+    wait(.6, seconds);
+    Rail.stop(hold);
+
+    // Avanzar y lanzar triball
+    Drivetrain.driveFor(reverse, 60, distanceUnits::cm);
+    Drivetrain.stop();
+
+    //LANZA EL TRIBALL
+    //Catapult.spin(fwd, 40, rpm);
+
+
+  }
+
 }
 
 void move_to_coordinate(double target_x, double target_y, double target_heading)
