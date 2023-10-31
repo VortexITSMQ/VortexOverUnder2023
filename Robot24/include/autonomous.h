@@ -63,7 +63,7 @@ void auton()
 
 void skills()
 {
-   //Complete route of ROBOT 24
+  //Complete route of ROBOT 24
   Drivetrain.setDriveVelocity(45, pct);
   
   //DESCOMENTAR CUANDO JALE LOS ENGRANES
@@ -96,8 +96,6 @@ void skills()
 
     //LANZA EL TRIBALL
     //Catapult.spin(fwd, 40, rpm);
-
-
   }
 
 }

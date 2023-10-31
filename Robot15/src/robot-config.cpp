@@ -107,6 +107,8 @@ void vexcodeInit( void ) {
 void chassis_control(){
   int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
   int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
+  drivetrainLeftSideSpeed = fmax(drivetrainLeftSideSpeed, 70);
+  drivetrainRightSideSpeed = fmax(drivetrainRightSideSpeed, 70);
   
   if (drivetrainLeftSideSpeed < JOYSTICK_DEADBAND && drivetrainLeftSideSpeed > -JOYSTICK_DEADBAND) {
     if (DrivetrainLNeedsToBeStopped_Controller1) {
