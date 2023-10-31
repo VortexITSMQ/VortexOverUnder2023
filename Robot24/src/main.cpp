@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       C:\Users\nerij                                            */
+/*    Author:       VORTEX                                                    */
 /*    Created:      Wed Apr 19 2023                                           */
 /*    Description:  V5 project                                                */
 /*                                                                            */
