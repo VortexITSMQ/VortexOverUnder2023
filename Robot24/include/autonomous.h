@@ -11,17 +11,23 @@ void auton()
 {
   //Complete route of ROBOT 24
   //Drivetrain.setDriveVelocity(45, pct);
+
+  /*------------------------
+   * LA CATAPULTA SE CONTRAE
+   *------------------------*/
+  CatapultSwitch.pressed(CatapultSwitch_cb);
+  Catapult.spin(fwd);
   
-  //DESCOMENTAR CUANDO JALE LOS ENGRANES
-  //CatapultSwitch.pressed(CatapultSwitch_cb);
-  //Catapult.spin(fwd);
-  
-  //Ida a triball
-  Drivetrain.driveFor(reverse, 35, distanceUnits::cm);
+  /*---------------
+   * Ida a triball
+   *---------------*/
+  Drivetrain.driveFor(reverse, 36, distanceUnits::cm);
   Drivetrain.turnToHeading(45, rotationUnits::deg);
   Drivetrain.driveFor(fwd, 46, distanceUnits::cm);
 
-  //Recoger el triball
+  /*------------------
+   * Recoger el triball
+   *------------------*/
   CollectorFront.spin(fwd);
   CollectorBack.spin(fwd, 80, percent);
   Rail.spin(reverse);
@@ -33,31 +39,32 @@ void auton()
   wait(.6, seconds);
   Rail.stop(hold);
 
-  //IDA AL TUBO NEGRO
+  /*------------------
+   * IDA AL TUBO NEGRO
+   *------------------*/
   Drivetrain.driveFor(reverse, 68, distanceUnits::cm);
   Drivetrain.turnToHeading(90, rotationUnits::deg);
-  Drivetrain.driveFor(reverse, 60, distanceUnits::cm);
+  Drivetrain.driveFor(reverse, 55, distanceUnits::cm);
   CollectorBack.stop();
   CollectorFront.stop();
 
   Drivetrain.setDriveVelocity(10, pct);
 
-  //LANZA EL TRIBALL
-  //Catapult.spin(fwd, 40, rpm);
+  /*-----------------
+   *LANZA EL TRIBALL
+   *-----------------*/
+  wait(2, seconds);
+  Catapult.spin(fwd, 40, rpm);
 
-  wait(6, seconds);
-
-  //SE HACE PARA ATRAS PARA QUE EL RECOLECTOR TOQUE EL TUBO
+  /*-------------------------------------------------------
+   *SE HACE PARA ATRAS PARA QUE EL RECOLECTOR TOQUE EL TUBO
+   *-------------------------------------------------------*/
   Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
   Drivetrain.turnToHeading(-70., rotationUnits::deg);
-  //Drivetrain.driveFor(fwd, 5, distanceUnits::cm);
   Rail.spin(reverse);
   wait(4, seconds);
   Rail.stop(hold);
-  Drivetrain.driveFor(fwd, 10, distanceUnits::cm);
-
-
-
+  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
 
 }
 

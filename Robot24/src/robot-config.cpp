@@ -77,13 +77,13 @@ void Wings_cb(){
 
 void Rail_fwd_cb(){
   while(Controller1.ButtonUp.pressing())
-    Rail.spin(fwd);
+    Rail.spin(reverse);
   Rail.stop(hold);
 }
 
 void Rail_bwd_cb(){
   while(Controller1.ButtonDown.pressing())
-    Rail.spin(reverse, 90, percent);
+    Rail.spin(fwd, 90, percent);
   Rail.stop(hold);
 }
 
@@ -118,6 +118,7 @@ int rc_auto_loop_function_Controller1() {
   Controller1.ButtonB.pressed(Wings_cb);
   // Controller1.ButtonR2.pressed(LilArm_cb);
   Controller1.ButtonUp.pressed(Rail_fwd_cb);
+  
   Controller1.ButtonDown.pressed(Rail_bwd_cb);
   Controller1.ButtonR2.pressed(Collector_fwd_cb);
   Controller1.ButtonL2.pressed(Collector_bwd_cb);
