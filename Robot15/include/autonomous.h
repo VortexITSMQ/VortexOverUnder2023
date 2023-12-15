@@ -41,7 +41,7 @@ void auton()
 
   //se acerca al trible rojo para agarrarlo
   Drivetrain.turnToHeading(-135, rotationUnits::deg, 100, rpm, true);
-  Drivetrain.driveFor(reverse, 11, distanceUnits::cm);
+  Drivetrain.driveFor(reverse, 10, distanceUnits::cm);
 
   //Agarra el trible
   Climber.spin(reverse, 45, percent);
@@ -73,8 +73,8 @@ void auton()
   IndexerRight.set(true);
   
   // Golpear triballs 
-  Drivetrain.setDriveVelocity(40, pct);
-  Drivetrain.driveFor(fwd, 40, distanceUnits::cm);
+  Drivetrain.setDriveVelocity(35, pct);
+  Drivetrain.driveFor(fwd, 38, distanceUnits::cm);
   IndexerLeft.set(false);
   IndexerRight.set(false);
   Drivetrain.setDriveVelocity(28, pct);
@@ -98,17 +98,49 @@ void skills()
   }
   Drivetrain.setDriveVelocity(28, pct);
   
-  //Primera ida
-  Drivetrain.driveFor(fwd, 120, distanceUnits::cm);
+  //salida del pasillo
+  Drivetrain.driveFor(fwd, 95, distanceUnits::cm);
+  Drivetrain.turnToHeading(90, rotationUnits::deg, 100, rpm, true);
 
-  //se acerca al trible rojo para agarrarlo
-  Drivetrain.turnToHeading(-90, rotationUnits::deg, 100, rpm, true);
-  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
-  
-  Drivetrain.turnToHeading(-180, rotationUnits::deg, 100, rpm, true);
-  Drivetrain.driveFor(fwd, 20, distanceUnits::cm);
-  
-  Drivetrain.turnToHeading(-90, rotationUnits::deg, 100, rpm, true);
+  // llegada  a red
+  Drivetrain.driveFor(fwd, 45, distanceUnits::cm);
+
+  // abrir alitas para atrapar triballs
+  IndexerLeft.set(true);
+  IndexerRight.set(true);
+  wait(10, seconds);
+  IndexerLeft.set(false);
+  IndexerRight.set(false);
+
+  // llegada al tubo
+  Drivetrain.turnToHeading(180, rotationUnits::deg, 100, rpm, true);
+  Drivetrain.driveFor(fwd, 50, distanceUnits::cm);
+  Drivetrain.turnToHeading(90, rotationUnits::deg, 100, rpm, true);
+
+  int i;
+  for (i=0;i<4;i++){
+    // vuelta a red
+    Drivetrain.driveFor(fwd, 50, distanceUnits::cm);
+    Drivetrain.turnToHeading(0, rotationUnits::deg, 100, rpm, true);
+    IndexerLeft.set(true);
+    IndexerRight.set(true);
+
+    // golpe a la red
+    Drivetrain.setDriveVelocity(60, pct);
+    Drivetrain.driveFor(fwd, 50, distanceUnits::cm)
+    Drivetrain.setDriveVelocity(28, pct);
+
+    // regreso al tubo
+    // IndexerLeft.set(false);
+    // IndexerRight.set(false);
+    Drivetrain.driveFor(reverse, 50, distanceUnits::cm);
+    Drivetrain.turnToHeading(90, rotationUnits::deg, 100, rpm, true);
+    Drivetrain.driveFor(reverse, 50, distanceUnits::cm);
+
+    //esperar triballs
+    wait(8, seconds);
+  }
+
 }
 
 void move_to_coordinate(double target_x, double target_y, double target_heading)

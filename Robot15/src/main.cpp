@@ -43,7 +43,7 @@ void usercontrol(void) {
 }
 
 int main() {
-  Competition.autonomous(autonomous);
+  Competition.autonomous(skills);
   Competition.drivercontrol(usercontrol);
 
   pre_auton();

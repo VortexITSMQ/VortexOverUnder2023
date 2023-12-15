@@ -64,6 +64,56 @@ void auton()
 void skills()
 {
   //Complete route of ROBOT 24
+  //Drivetrain.setDriveVelocity(45, pct);
+  
+  //DESCOMENTAR CUANDO JALE LOS ENGRANES
+  CatapultSwitch.pressed(CatapultSwitch_cb);
+  Catapult.spin(fwd);
+  
+  //Ida a triball
+  Drivetrain.driveFor(reverse, 38, distanceUnits::cm);
+  Drivetrain.turnToHeading(45, rotationUnits::deg);
+  Drivetrain.driveFor(fwd, 46.5, distanceUnits::cm);
+
+
+  for(int i =0; i<10;i++){
+    //Recoger el triball
+    CollectorFront.spin(fwd);
+    CollectorBack.spin(fwd, 80, percent);
+    Rail.spin(reverse);
+    wait(3.5, seconds);
+
+    Rail.stop(hold);
+
+    Rail.spin(fwd, 90, percent);
+    wait(.6, seconds);
+    Rail.stop(hold);
+
+    CollectorBack.stop();
+    CollectorFront.stop();
+
+    // int first_angle =  Drivetrain.heading();
+    Drivetrain.driveFor(reverse, 38, distanceUnits::cm);
+    Catapult.spin(fwd);
+    wait(3, sec);
+
+    Drivetrain.driveFor(fwd, 38.5, distanceUnits::cm);
+
+  }
+  //---------------------------
+
+
+
+
+
+
+
+
+
+
+  
+  /*
+  //Complete route of ROBOT 24
   Drivetrain.setDriveVelocity(45, pct);
   
   //DESCOMENTAR CUANDO JALE LOS ENGRANES
@@ -77,7 +127,7 @@ void skills()
 
   // recolectar y lanzar triballs
   int i;
-  for(i=0;i<2;i++){ 
+  for(i=0;i<10;i++){ 
     //Recoger el triball
     CollectorFront.spin(fwd);
     CollectorBack.spin(fwd, 80, percent);
@@ -95,8 +145,11 @@ void skills()
     Drivetrain.stop();
 
     //LANZA EL TRIBALL
-    //Catapult.spin(fwd, 40, rpm);
-  }
+    wait(2, seconds);
+    Catapult.spin(fwd, 40, rpm);
+
+    Drivetrain.driveFor(fwd, 60, distanceUnits::cm);*/
+
 
 }
 

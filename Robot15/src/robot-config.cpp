@@ -65,13 +65,13 @@ void Wings_cb(){
 
 void Climber_fwd_cb(){
   while (Controller1.ButtonUp.pressing())
-    Climber.spin(reverse, 70, percent);
+    Climber.spin(reverse, 85, percent);
   Climber.stop();
 }
 
 void Climber_bwd_cb(){
   while (Controller1.ButtonDown.pressing())
-    Climber.spin(fwd, 70, percent);
+    Climber.spin(fwd, 85, percent);
   Climber.stop();
 }
 
@@ -81,9 +81,27 @@ void Collector_cb(){
   Collector.stop(hold);
 }
 
+void Turn90_cb(){
+  Drivetrain.turnToHeading(90, deg, 100, rpm);
+  // Drivetrain.turnToHeading(-20, rotationUnits::deg, 110, rpm, true);
+
+}
+
+void Turn180_cb(){
+  Drivetrain.turnToHeading(180, deg, 100, rpm);
+}
+
+void Turn270_cb(){
+  Drivetrain.turnToHeading(270, deg, 100, rpm);
+}
+
+void Turn0_cb(){
+  Drivetrain.turnToHeading(0, deg, 100, rpm);
+}
 
 int rc_auto_loop_function_Controller1() {
   Controller1.ButtonB.pressed(Wings_cb);
+  Controller1.ButtonX.pressed(Wings_cb);
   Controller1.ButtonUp.pressed(Climber_fwd_cb);
   Controller1.ButtonDown.pressed(Climber_bwd_cb);
   while(true) {
